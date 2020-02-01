@@ -30,6 +30,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     private double Kp = 0.00001;
     private double currentDistance;
+    private DifferentialDrive drivetrain;
+
 
     // private final DifferentialDrive Drivetrain;
 
@@ -45,14 +47,15 @@ public class DrivetrainSubsystem extends SubsystemBase {
         backleftmotor.follow(frontleftmotor);
         backrightmotor.follow(frontrightmotor);
 
-        // Drivetrain = new DifferentialDrive (frontleftmotor, frontrightmotor);
+        drivetrain = new DifferentialDrive (frontleftmotor, frontrightmotor);
 
     }
 
-    public void drive(double y, double x) {
-        // Drivetrain.arcadeDrive(y,x);
-        frontleftmotor.set(y);
-        frontrightmotor.set(y);
+    public void drive(double forward, double turn) {
+        drivetrain.arcadeDrive(forward,turn);
+    }
+    
+    public void debug(){
         SmartDashboard.putNumber("leftDist", frontleftmotor.getEncoder().getVelocity());
         SmartDashboard.putNumber("rightDist", frontrightmotor.getEncoder().getVelocity());
     }
