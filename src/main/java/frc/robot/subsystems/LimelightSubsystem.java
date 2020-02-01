@@ -11,11 +11,11 @@ public class LimelightSubsystem extends SubsystemBase {
         return NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0.0);
     }
 
-    private double ty() {
+    public double ty() {
         return NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0.0);
     }
 
-    private double ts() {
+    public double ts() {
         return NetworkTableInstance.getDefault().getTable("limelight").getEntry("ts").getDouble(0.0);
     }
 
@@ -23,7 +23,7 @@ public class LimelightSubsystem extends SubsystemBase {
         return NetworkTableInstance.getDefault().getTable("limelight").getEntry("ta").getDouble(0.0);
     }
 
-    private int[] camTran() {
+    public int[] camTran() {
         double[] raw = NetworkTableInstance.getDefault().getTable("limelight").getEntry("camtran")
                 .getDoubleArray(new double[] {});
         int[] retval = new int[raw.length];
@@ -32,7 +32,10 @@ public class LimelightSubsystem extends SubsystemBase {
         }
         return retval;
     }
-
+    public double getDistance() {
+        return NetworkTableInstance.getDefault().getTable("limelight").getEntry("camtran")
+                .getDoubleArray(new double[] {})[2];
+    }
     // sends all of the crap
     public void debug() {
         SmartDashboard.putNumber("TX", tx());
@@ -40,13 +43,10 @@ public class LimelightSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("TS", ts());
         SmartDashboard.putNumber("Image area", ta());
         SmartDashboard.putNumber("Distance", getDistance());
-        //SmartDashboard.putString("Camtran", Arrays.toString(camTran()));
+        SmartDashboard.putString("Camtran", Arrays.toString(camTran()));
     }
 
-    public double getDistance() {
-        return NetworkTableInstance.getDefault().getTable("limelight").getEntry("camtran")
-                .getDoubleArray(new double[] {})[2];
-    }
+    
 
     @Override
     public void periodic() {
