@@ -21,6 +21,8 @@ public class ShooterSubsystem extends SubsystemBase {
     private VictorSP ssf;
     private VictorSP bag;
 
+    
+
     public ShooterSubsystem() {
         shooter1 = new CANSparkMax(firstShooterPort, MotorType.kBrushless); 
         shooter2 = new CANSparkMax(secondShooterPort, MotorType.kBrushless);
