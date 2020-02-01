@@ -49,7 +49,7 @@ public class LimelightCommand extends CommandBase {
     if(debug){
       m_limelightSubsystem.debug();
     }
-    approachTarget(targetDistance);
+    //approachTarget(targetDistance);
   }
 
   // Called once the command ends or is interrupted.

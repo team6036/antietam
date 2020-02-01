@@ -21,6 +21,10 @@ public final class Constants {
     public final static int joystickPort = 0;
     public final static int xboxPort = 1;
 
+    public final static class TurretConstants{
+        public static final int motorPort = 0;
+    }
+
     public final static class DrivetrainConstants {
         public static final int frontleftmotorPORT = 1;
         public static final int backleftmotorPORT = 2;
