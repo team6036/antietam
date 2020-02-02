@@ -71,12 +71,11 @@ public class LimelightCommand extends CommandBase {
       horizontalError = m_limelightSubsystem.tx();
       SmartDashboard.putNumber("Horizontal Error", horizontalError);
       horizontalPower += horizontalError * horizontalKP;
-      m_drivetrainSubsystem.drive(horizontalKP * horizontalPower, horizontalPower); // Note, this may need to be flipped
       
       verticalError = m_limelightSubsystem.getDistance() - targetDistance;
       SmartDashboard.putNumber("Vertical Error", verticalError);
       verticalPower += verticalError * verticalKP;
-      m_drivetrainSubsystem.drive(verticalPower, 0);
+      m_drivetrainSubsystem.drive(-verticalPower, horizontalPower);
     }
   }
 }

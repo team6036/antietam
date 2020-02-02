@@ -22,23 +22,27 @@ public class ShooterSubsystem extends SubsystemBase {
     private VictorSP bag;
 
     public ShooterSubsystem() {
+        /*
         shooter1 = new CANSparkMax(firstShooterPort, MotorType.kBrushless); 
         shooter2 = new CANSparkMax(secondShooterPort, MotorType.kBrushless);
         ssf = new VictorSP(ssfPort);
         bag = new VictorSP(bagPort);
+        */
         /*
         shooter1.enableVoltageCompensation(12);
         shooter2.enableVoltageCompensation(12);
         what it do??
         */
-        shooter2.follow(shooter1, true); //invert?
+        //shooter2.follow(shooter1, true); //invert?
     }
 
     public void debug(){
+        /*
         SmartDashboard.putNumber("rpm1", -shooter1.getEncoder().getVelocity());
         SmartDashboard.putNumber("rpm2", -shooter2.getEncoder().getVelocity());
         SmartDashboard.putNumber("current1", shooter1.getOutputCurrent());
         SmartDashboard.putNumber("current2", shooter2.getOutputCurrent());
+        */
     }
 
     

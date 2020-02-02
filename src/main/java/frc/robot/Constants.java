@@ -49,8 +49,8 @@ public final class Constants {
 
     public final static class LimelightConstants {
         public final static double verticalKP = 0.00001;
-        public final static double horizontalKP = 0.00001;
-        public final static double targetDistance = 30;
+        public final static double horizontalKP = 0.0002;
+        public final static double targetDistance = 45;
 
         public final static boolean debug = true;
     }
