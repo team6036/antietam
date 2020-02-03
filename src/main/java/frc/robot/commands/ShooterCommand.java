@@ -8,10 +8,13 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.jStickListener;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.TargetingGroupConstants;
 import frc.robot.subsystems.ShooterSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 /**
  * An example command that uses an example subsystem.
@@ -20,28 +23,22 @@ public class ShooterCommand extends CommandBase {
   private final boolean debug = ShooterConstants.debug;
   private boolean autoTarget = TargetingGroupConstants.autoTarget;
 
-  private final XboxController m_controller;
   private final ShooterSubsystem m_shooterSubsystem;
 
-  /**
-   * Creates a new ExampleCommand.
-   * 
-   * The subsystem used by this command.
-   */
-  public ShooterCommand(ShooterSubsystem shooterSubsystem, XboxController controller) {
+  private jStickListener rTrigger;
+
+  public ShooterCommand(ShooterSubsystem shooterSubsystem, jStickListener rTrigger) {
     m_shooterSubsystem = shooterSubsystem;
-    this.m_controller = controller;
+    this.rTrigger = rTrigger;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(shooterSubsystem);
+    addRequirements(shooterSubsystem); // @TODO this for all commands and respective key subsystems
   }
 
-  public void changeState() {
-    autoTarget = !autoTarget;
-  }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -50,6 +47,11 @@ public class ShooterCommand extends CommandBase {
     if (debug) {
       m_shooterSubsystem.debug();
     }
+    /*
+    if(rTrigger.getY()!=0){
+      m_shooterSubsystem.shoot(rTrigger.getY());
+    }
+    */
 
   }
 
