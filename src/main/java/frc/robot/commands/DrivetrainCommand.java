@@ -8,7 +8,6 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
@@ -43,10 +42,6 @@ public class DrivetrainCommand extends CommandBase {
   @Override
   public void execute() {
     m_drivetrain.drive(joystick.getY(), joystick.getX());
-
-    System.out.print("Test");
-    SmartDashboard.putString("Drivetrain", "Key");
-
   }
 
   // Called once the command ends or is interrupted.

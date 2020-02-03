@@ -48,7 +48,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
         backrightmotor.follow(frontrightmotor);
 
         drivetrain = new DifferentialDrive (frontleftmotor, frontrightmotor);
-
     }
 
     public void drive(double forward, double turn) {

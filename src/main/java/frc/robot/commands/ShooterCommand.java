@@ -9,19 +9,20 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Constants.ShooterConstants;
+import frc.robot.Constants.TargetingGroupConstants;
 import frc.robot.subsystems.ShooterSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-
 
 /**
  * An example command that uses an example subsystem.
  */
 public class ShooterCommand extends CommandBase {
   private final boolean debug = ShooterConstants.debug;
- 
+  private boolean autoTarget = TargetingGroupConstants.autoTarget;
+
   private final XboxController m_controller;
   private final ShooterSubsystem m_shooterSubsystem;
-  
+
   /**
    * Creates a new ExampleCommand.
    * 
@@ -34,6 +35,10 @@ public class ShooterCommand extends CommandBase {
     addRequirements(shooterSubsystem);
   }
 
+  public void changeState() {
+    autoTarget = !autoTarget;
+  }
+
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
@@ -42,10 +47,10 @@ public class ShooterCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(debug){
+    if (debug) {
       m_shooterSubsystem.debug();
     }
-    
+
   }
 
   // Called once the command ends or is interrupted.

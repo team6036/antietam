@@ -14,12 +14,18 @@ import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.HoodSubsystem;
+import frc.robot.subsystems.TurretSubsystem;
 import frc.robot.commands.DrivetrainCommand;
 import frc.robot.commands.LimelightCommand;
 import frc.robot.commands.ShooterCommand;
+import frc.robot.commands.TurretCommand;
+import frc.robot.commands.HoodCommand;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -33,18 +39,26 @@ public class RobotContainer {
 
   private final Joystick m_joystick = new Joystick(Constants.joystickPort);
   private final XboxController m_controller = new XboxController(Constants.xboxPort);
-
+  private final JoystickButton xButton = new JoystickButton(m_controller, 3);
+  private final JoystickButton aButton = new JoystickButton(m_controller, 1);
+  private final jStickListener lXboxStick = new jStickListener();
+  private final jStickListener rXboxStick = new jStickListener();
+  private final jStickListener bigStick = new jStickListener();
+  
   private final AccumulatorSubsystem m_accumulatorSubsystem = new AccumulatorSubsystem();
   private final ClimberSubsystem m_climberSubsystem = new ClimberSubsystem();
   private final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
   private final LimelightSubsystem m_limelightSubsystem = new LimelightSubsystem();
-  private final ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem(); 
+  private final ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem();
+  private final TurretSubsystem m_turretSubsystem = new TurretSubsystem();
+  private final HoodSubsystem m_hoodSubsystem = new HoodSubsystem();
 
   private final DrivetrainCommand m_drivetrainCommand = new DrivetrainCommand(m_drivetrainSubsystem, m_joystick);
   private final LimelightCommand m_limelightCommand = new LimelightCommand(m_limelightSubsystem, m_drivetrainSubsystem,
       m_shooterSubsystem);
   private final ShooterCommand m_shooterCommand = new ShooterCommand(m_shooterSubsystem, m_controller);
-
+  private final TurretCommand m_turretCommand = new TurretCommand(m_turretSubsystem, m_limelightSubsystem, lXboxStick);
+  private final HoodCommand m_hoodCommand = new HoodCommand(m_hoodSubsystem, m_limelightSubsystem, rXboxStick, aButton);
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    * 
@@ -65,6 +79,13 @@ public class RobotContainer {
    * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    xButton.whenPressed(new InstantCommand(() -> changeTargetingState()));
+  }
+
+  private void changeTargetingState() {
+    m_shooterCommand.changeState();
+    m_hoodCommand.changeState();
+    m_turretCommand.changeState();
   }
 
   /**

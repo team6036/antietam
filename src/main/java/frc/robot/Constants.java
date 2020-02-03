@@ -21,8 +21,16 @@ public final class Constants {
     public final static int joystickPort = 0;
     public final static int xboxPort = 1;
 
-    public final static class TurretConstants{
+    public final static class HoodConstants {
         public static final int motorPort = 0;
+        public static final int[] encoderPorts = new int[]{0,0};
+        public static final double kp = 0.00001;
+    }
+
+    public final static class TurretConstants {
+        public static final int motorPort = 0;
+        public static final int[] encoderPorts = new int[] { 0, 0 };
+        public static final double kp = 0.00001;
     }
 
     public final static class DrivetrainConstants {
@@ -45,8 +53,7 @@ public final class Constants {
     public final static class ShooterConstants {
         public static final int firstShooterPort = 0;
         public static final int secondShooterPort = 0;
-        public static final int ssfPort = 0;
-        public static final int bagPort = 0;
+        public static final int hopupPort = 0;  
 
         public static final boolean debug = true;
     }
@@ -57,5 +64,9 @@ public final class Constants {
         public final static double targetDistance = 30;
 
         public final static boolean debug = true;
+    }
+
+    public final static class TargetingGroupConstants {
+        public final static boolean autoTarget = true;
     }
 }
