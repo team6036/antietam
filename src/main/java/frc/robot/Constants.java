@@ -23,7 +23,7 @@ public final class Constants {
 
     public final static class HoodConstants {
         public static final int motorPort = 0;
-        public static final int[] encoderPorts = new int[]{0,0};
+        public static final int[] encoderPorts = new int[] { 0, 0 };
         public static final double kp = 0.00001;
     }
 
@@ -53,7 +53,9 @@ public final class Constants {
     public final static class ShooterConstants {
         public static final int firstShooterPort = 0;
         public static final int secondShooterPort = 0;
-        public static final int hopupPort = 0;  
+        public static final int hopupPort = 0;
+        public static final int lineBreakPort = 0;
+        public static final double kp = 0.00001;
 
         public static final boolean debug = true;
     }

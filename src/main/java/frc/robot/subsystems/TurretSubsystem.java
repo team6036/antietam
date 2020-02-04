@@ -20,6 +20,8 @@ public class TurretSubsystem extends SubsystemBase {
     private Encoder absEncoder;
 
     private double power = 0;
+    private double error = 0;
+    private boolean exists = false;
 
     public TurretSubsystem() {
         motor = new CANSparkMax(motorPort, MotorType.kBrushless);
@@ -46,11 +48,17 @@ public class TurretSubsystem extends SubsystemBase {
          * Important: This method needs heavy modification. It needs to: 1. have a field
          * and behaviour for no target 2. prevent overrotation
          */
+        this.error = error;
+        this.exists = exists;
+    }
+
+    @Override
+    public void periodic() {
         if (exists) {
             power += error * kp;
             motor.set(power);
         } else {
-            //turn such that it doesnt over-turn
+            // turn such that it doesnt over-turn
         }
     }
 

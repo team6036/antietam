@@ -10,7 +10,6 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.jStickListener;
 import frc.robot.Constants.ShooterConstants;
-import frc.robot.Constants.TargetingGroupConstants;
 import frc.robot.subsystems.ShooterSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -21,7 +20,6 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
  */
 public class ShooterCommand extends CommandBase {
   private final boolean debug = ShooterConstants.debug;
-  private boolean autoTarget = TargetingGroupConstants.autoTarget;
 
   private final ShooterSubsystem m_shooterSubsystem;
 
@@ -48,8 +46,8 @@ public class ShooterCommand extends CommandBase {
       m_shooterSubsystem.debug();
     }
     /*
-    if(rTrigger.getY()!=0){
-      m_shooterSubsystem.shoot(rTrigger.getY());
+    if(rTrigger.getY()>=0.05){
+      m_shooterSubsystem.shoot();
     }
     */
 

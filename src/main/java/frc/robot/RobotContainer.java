@@ -39,11 +39,12 @@ public class RobotContainer {
 
   private final Joystick m_joystick = new Joystick(Constants.joystickPort);
   private final XboxController m_controller = new XboxController(Constants.xboxPort);
-  private final JoystickButton xButton = new JoystickButton(m_controller, 3);
-  private final JoystickButton aButton = new JoystickButton(m_controller, 1);
-  private final jStickListener lXboxStick = new jStickListener();
-  private final jStickListener rXboxStick = new jStickListener();
-  private final jStickListener bigStick = new jStickListener();
+  private final JoystickButton m_xButton = new JoystickButton(m_controller, 3);
+  private final JoystickButton m_aButton = new JoystickButton(m_controller, 1);
+  private final jStickListener m_rTrigger = new jStickListener();
+  private final jStickListener m_lXboxStick = new jStickListener();
+  private final jStickListener m_rXboxStick = new jStickListener();
+  private final jStickListener m_bigStick = new jStickListener();
   
   private final AccumulatorSubsystem m_accumulatorSubsystem = new AccumulatorSubsystem();
   private final ClimberSubsystem m_climberSubsystem = new ClimberSubsystem();
@@ -56,9 +57,9 @@ public class RobotContainer {
   private final DrivetrainCommand m_drivetrainCommand = new DrivetrainCommand(m_drivetrainSubsystem, m_joystick);
   private final LimelightCommand m_limelightCommand = new LimelightCommand(m_limelightSubsystem, m_drivetrainSubsystem,
       m_shooterSubsystem);
-  private final ShooterCommand m_shooterCommand = new ShooterCommand(m_shooterSubsystem, m_controller);
-  private final TurretCommand m_turretCommand = new TurretCommand(m_turretSubsystem, m_limelightSubsystem, lXboxStick);
-  private final HoodCommand m_hoodCommand = new HoodCommand(m_hoodSubsystem, m_limelightSubsystem, rXboxStick, aButton);
+  private final ShooterCommand m_shooterCommand = new ShooterCommand(m_shooterSubsystem, m_rTrigger);
+  private final TurretCommand m_turretCommand = new TurretCommand(m_turretSubsystem, m_limelightSubsystem, m_lXboxStick);
+  private final HoodCommand m_hoodCommand = new HoodCommand(m_hoodSubsystem, m_limelightSubsystem, m_rXboxStick, m_aButton);
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    * 
@@ -79,11 +80,10 @@ public class RobotContainer {
    * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    xButton.whenPressed(new InstantCommand(() -> changeTargetingState()));
+    m_xButton.whenPressed(new InstantCommand(() -> changeTargetingState()));
   }
 
   private void changeTargetingState() {
-    m_shooterCommand.changeState();
     m_hoodCommand.changeState();
     m_turretCommand.changeState();
   }
