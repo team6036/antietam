@@ -59,8 +59,10 @@ public class ShooterCommand extends CommandBase {
     }
   }
 
-  private void feedBall(){
-
+  private boolean feedBall() {
+      switch(ballState){
+        case:
+      }
   }
 
   @Override
@@ -75,12 +77,17 @@ public class ShooterCommand extends CommandBase {
     }
     switch (velocity) {
     case TARGET:
+      if(feedBall()){
+        velocity=Velocity.MINIMUM;
+      }
+      break;
     case ACCELERATING:
       containBall();
       if (Math.abs(pidController.getSetpoint()) == Math.abs(m_shooterSubsystem.getShooterVelocity()) + 0.05) {
         velocity = Velocity.TARGET;
       }
       m_shooterSubsystem.setShooterVelocity(pidController.calculate(m_shooterSubsystem.getShooterVelocity()));
+      break;
     case MINIMUM:
       containBall();
     }
@@ -104,7 +111,7 @@ public class ShooterCommand extends CommandBase {
  * ballStates == CONTAINED or WAITING, if getLineBreakSensor returns true then
  * setBallHopperVelocity backward
  */
-/** 
+/**
  * Add a feedBall function, which checks state of first object in ballStates ==
  * READY OR LEAVING, if first object in ballStates == READY, check if line break
  * sensor is impeded -> true then set state to leaving, false then run motors
