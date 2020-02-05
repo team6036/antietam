@@ -16,9 +16,6 @@ import java.util.Arrays;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-/**
- * An example command that uses an example subsystem.
- */
 public class ShooterCommand extends CommandBase {
   private static enum Velocity {
     MINIMUM, ACCELERATING, TARGET;
@@ -37,57 +34,62 @@ public class ShooterCommand extends CommandBase {
   private Velocity velocity = Velocity.MINIMUM;
   private ArrayList<BallStates> ballStates = new ArrayList<>(
       Arrays.asList(new BallStates[] { BallStates.CONTAINED, BallStates.CONTAINED, BallStates.CONTAINED }));
-  private double shooterError, shooterPower, shooterTargetVelocity = 0;
   private PIDController pidController = new PIDController(kp, 0, 0);
 
   public ShooterCommand(ShooterSubsystem shooterSubsystem, jStickListener rTrigger) {
     m_shooterSubsystem = shooterSubsystem;
     this.m_rTrigger = rTrigger;
-    // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(shooterSubsystem); // @TODO this for all commands and respective key subsystems
   }
 
   public void setTargetVelocity(double velocity) {
     pidController.setSetpoint(velocity);
-    this.velocity=Velocity.ACCELERATING;
+    this.velocity = Velocity.ACCELERATING;
   }
 
-  public void containBall() {
+  /**
+   * checks to make sure balls aren't being ejected prematurely super
+   * innefficient, might be cleaned up later
+   */
+  private void containBall() {
     if ((ballStates.get(0) == BallStates.CONTAINED || ballStates.get(0) == BallStates.LEAVING)
-        && m_shooterSubsystem.getLineBreak()) {
+        && m_shooterSubsystem.getLineBreak()) { // not sure if statement is necessary, since this is called on execute
+                                                // whilst accelerating and not
       m_shooterSubsystem.setHopupVelocity(-0.1);
     }
   }
 
-  // Called when the command is initially scheduled.
+  private void feedBall(){
+
+  }
+
   @Override
   public void initialize() {
 
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     if (debug) {
       m_shooterSubsystem.debug();
     }
-    /*
-     * if(rTrigger.getY()>=0.05){ m_shooterSubsystem.shoot(); }
-     */
-    m_shooterSubsystem.setShooterVelocity(pidController.calculate(m_shooterSubsystem.getShooterVelocity()));
-    if (pidController.getSetpoint() > 0 && m_shooterSubsystem.getShooterVelocity() != pidController.getSetpoint()) {
-      velocity = Velocity.ACCELERATING;
-    } else if (pidController.getSetpoint() == m_shooterSubsystem.getShooterVelocity()) {
-      velocity = Velocity.TARGET;
+    switch (velocity) {
+    case TARGET:
+    case ACCELERATING:
+      containBall();
+      if (Math.abs(pidController.getSetpoint()) == Math.abs(m_shooterSubsystem.getShooterVelocity()) + 0.05) {
+        velocity = Velocity.TARGET;
+      }
+      m_shooterSubsystem.setShooterVelocity(pidController.calculate(m_shooterSubsystem.getShooterVelocity()));
+    case MINIMUM:
+      containBall();
     }
   }
 
-  // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
   }
 
-  // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     return false;
@@ -100,8 +102,9 @@ public class ShooterCommand extends CommandBase {
  * target velocity is reached set state to TARGET Add a containBall function,
  * which calls getLineBreakSensor and checks state of the first object in
  * ballStates == CONTAINED or WAITING, if getLineBreakSensor returns true then
- * setBallHopperVelocity backwards
- * 
+ * setBallHopperVelocity backward
+ */
+/** 
  * Add a feedBall function, which checks state of first object in ballStates ==
  * READY OR LEAVING, if first object in ballStates == READY, check if line break
  * sensor is impeded -> true then set state to leaving, false then run motors
