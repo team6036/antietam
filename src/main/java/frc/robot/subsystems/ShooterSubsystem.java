@@ -15,16 +15,11 @@ public class ShooterSubsystem extends SubsystemBase {
     private static final int secondShooterPort = ShooterConstants.secondShooterPort;
     private static final int hopupPort = ShooterConstants.hopupPort;
     private static final int lineBreakPort = ShooterConstants.lineBreakPort;
-    private static final double kp = ShooterConstants.kp;
 
     private CANSparkMax firstShooter;
     private CANSparkMax secondShooter;
     private VictorSP hopupMotor;
     private AnalogInput lineBreak;
-
-    private double shooterTargetVelocity = 0;
-    private double shooterError = 0;
-    private double shotterPower = 0;
 
     public ShooterSubsystem() {
         firstShooter = new CANSparkMax(firstShooterPort, MotorType.kBrushless);
@@ -40,23 +35,25 @@ public class ShooterSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("rpm2", -secondShooter.getEncoder().getVelocity());
     }
 
-    public void setShooterVelocity(double targetVelocity) {
-        shooterTargetVelocity = targetVelocity;
+    public void setShooterVelocity(double power) {
+        firstShooter.set(power);
     }
 
     public double getShooterVelocity() {
         return firstShooter.getEncoder().getVelocity();
     }
 
-    public void shoot() {
-        firstShooter.set(1);
-        hopupMotor.set(1);
-
+    public void setHopupVelocity(double targetVelocity) {
+        hopupMotor.set(targetVelocity);
     }
+
+    public boolean getLineBreak() {
+        return false;
+    }
+
+    
 
     @Override
     public void periodic() {
-        shooterError = shooterTargetVelocity - getShooterVelocity();
-        firstShooter.set(shooterError * kp);
     }
 }
