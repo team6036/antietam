@@ -9,9 +9,14 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.commands.ExampleCommand;
-import frc.robot.subsystems.ExampleSubsystem;
-import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.commands.DrivetrainCommand;
+import frc.robot.subsystems.ControlPanelSubsystem;
+import frc.robot.commands.ControlPanelCommand;
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Constants.ControlPanel.Buttons;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -21,19 +26,26 @@ import edu.wpi.first.wpilibj2.command.Command;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-
-  private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
-
+  int leftPort = 1;
+  int rightPort = 15;
+  int jport = 0;
+  private final Joystick m_joystick = new Joystick(jport);
+  private final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem(leftPort, rightPort);
+  private final DrivetrainCommand m_driveCommand = new DrivetrainCommand(m_drivetrainSubsystem, m_joystick);
+  private final ControlPanelSubsystem m_controlpanelSubsystem = new ControlPanelSubsystem();;
+  private final ControlPanelCommand m_controlpanelCommand = new ControlPanelCommand(m_controlpanelSubsystem);
+  private final JoystickButton controlPanelCommandButton = new JoystickButton(m_joystick, Buttons.NORMAL);
 
 
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    // Configure the button bindings
+    // CommandScheduler.getInstance().setDefaultCommand(m_drivetrainSubsystem, m_driveCommand);
+    CommandScheduler.getInstance().registerSubsystem(m_controlpanelSubsystem);
     configureButtonBindings();
   }
+
 
   /**
    * Use this method to define your button->command mappings.  Buttons can be created by
@@ -42,6 +54,7 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    controlPanelCommandButton.whenPressed(m_controlpanelCommand);
   }
 
 
@@ -53,5 +66,11 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
     return m_autoCommand;
+  }
+
+
+  public void scheduleControlPanelCommands() {
+    if (m_controlpanelCommand != null)
+      m_controlpanelCommand.schedule();
   }
 }
