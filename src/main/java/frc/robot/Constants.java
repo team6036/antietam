@@ -16,4 +16,19 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+    public final static class ControlPanel {
+        public final static class Colors {
+            public final static String RED = "red";
+            public final static String GREEN = "green";
+            public final static String BLUE = "blue";
+            public final static String YELLOW = "yellow";
+            public final static String UNKNOWN = "unknown";
+        }
+        public final static class Motor {
+            public final static int CHANNEL = 1;
+        }
+        public final static class Buttons {
+            public final static int NORMAL = 10;
+        }
+    }
 }
