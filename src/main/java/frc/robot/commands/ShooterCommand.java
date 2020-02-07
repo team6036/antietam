@@ -42,36 +42,112 @@ public class ShooterCommand extends CommandBase {
     addRequirements(shooterSubsystem); // @TODO this for all commands and respective key subsystems
   }
 
-}
+  @Override
+  public void execute() {
+    containBall();
+    shootBall();
+    setVelocity();
+    handleJoystick();
+    reset();
+  }
+
+  /**
+   * CointainBall() makes sure nothing comes out, spins backwards if it do, only
+   * when contained or waiting
+   */
+  private void containBall() {
+    switch (ballStates.get(0)) {
+    case CONTAINED: {
+      if (m_shooterSubsystem.getLineBreak()) {
+        m_shooterSubsystem.setHopupVelocity(-0.1);
+      }
+      return;
+    }
+    case WAITING: {
+      if (m_shooterSubsystem.getLineBreak()) {
+        m_shooterSubsystem.setHopupVelocity(-0.1);
+      }
+      return;
+    }
+    default: {
+      return;
+    }
+    }
+  }
+
+  /**
+   * Shootball() If ball is ready, feeds ball, once it detects it, sets ball to
+   * leaving If ball is leaving, and no longer being detected, deletes it
+   */
+  private void shootBall() {
+    switch (ballStates.get(0)) {
+    case READY: {
+      m_shooterSubsystem.setHopupVelocity(0.1);
+      if (m_shooterSubsystem.getLineBreak()) {
+        ballStates.set(0, BallStates.LEAVING);
+      }
+      return;
+    }
+    case LEAVING: {
+      if (!m_shooterSubsystem.getLineBreak()) {
+        ballStates.remove(0);
+      }
+      return;
+    }
+    default: {
+      return;
+    }
+    }
+
+  }
+
+  /**
+   * SetVelocity() sets velocity if waiting, if at speed, sets velocity to target
+   * and ball to ready might be good to integrate the ball part to shootball
+   */
+  private void setVelocity() {
+    switch (ballStates.get(0)) {
+    case WAITING: {
+      pidController.setSetpoint(0.1); // TODO this needs to be changed
+      if (pidController.getSetpoint() == m_shooterSubsystem.getShooterVelocity()) {
+        velocity = Velocity.TARGET;
+        ballStates.set(0, BallStates.READY);
+      } else {
+        m_shooterSubsystem.setShooterVelocity(pidController.calculate(m_shooterSubsystem.getShooterVelocity()));
+        velocity = Velocity.ACCELERATING;
+      }
+      return;
+    }
+    case CONTAINED: {
+      pidController.setSetpoint(0);
+      return;
+    }
+    default: {
+      return;
+    }
+    }
+  }
+
+  /**
+   * HandleJoystick() if after a certain threshold, set first to waiting, if after
+   * another, set all to waiting
+   */
+  public void handleJoystick() {
+    if(m_rTrigger.getAsDouble()>0.5){
+      for(int i = 0; i<ballStates.size(); i++){
+        ballStates.set(i, BallStates.WAITING);
+      }
+    }else if(m_rTrigger.getAsDouble()>0.1){
+      ballStates.set(0, BallStates.WAITING);
+    }
+  }
 
 /**
- * SPEC: Add a setTargetVelocity function, which implements the WPILIB PID class
- * for setting a target velocity, while in PID set state to ACCELERATING, when
- * target velocity is reached set state to TARGET Add a containBall function,
- * which calls getLineBreakSensor and checks state of the first object in
- * ballStates == CONTAINED or WAITING, if getLineBreakSensor returns true then
- * setBallHopperVelocity backward
+ * reset() if next is contained, set velocity to minimum
  */
-/**
- * Add a feedBall function, which checks state of first object in ballStates ==
- * READY OR LEAVING, if first object in ballStates == READY, check if line break
- * sensor is impeded -> true then set state to leaving, false then run motors
- * slightly forward if first object in ballStates == LEAVING, check if line
- * break sensor is impeded -> true then run motors slightly forward, false then
- * delete first object(ball has left)
- * 
- * Add a handleJoystickValue function: constantly check RT, if it's above dead
- * band then: if below 0.5 -> set first object in ballStates to WAITING if above
- * 0.5 -> set all objects in ballStates to WAITING
- * 
- * Add a shootBall function: if first object in ballStates is WAITING and
- * velocity is MINIMUM, then setTargetVelocity to a random number(for now) if
- * velocity is TARGET, set first object in ballStates to READY
- * 
- * Add a reset function: (if first object in ballStates is contained or
- * ballStates is empty) and shooter is at target, then call
- * setShooterVelocity(minVelocity), change state to MINIMUM
- * 
- * Lastly, just call containBall, handleJoystickValue, feedBall, shootBall,
- * reset in execute
- */
+public void reset(){
+  if(ballStates.get(0)==BallStates.CONTAINED){
+    velocity = Velocity.MINIMUM;
+  }
+}
+}
