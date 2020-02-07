@@ -7,11 +7,11 @@
 
 package frc.robot.commands;
 
-import frc.robot.jStickListener;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.ShooterSubsystem;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -29,78 +29,19 @@ public class ShooterCommand extends CommandBase {
   private final double kp = ShooterConstants.kp;
 
   private final ShooterSubsystem m_shooterSubsystem;
-  private jStickListener m_rTrigger;
+  private DoubleSupplier m_rTrigger;
 
   private Velocity velocity = Velocity.MINIMUM;
   private ArrayList<BallStates> ballStates = new ArrayList<>(
       Arrays.asList(new BallStates[] { BallStates.CONTAINED, BallStates.CONTAINED, BallStates.CONTAINED }));
   private PIDController pidController = new PIDController(kp, 0, 0);
 
-  public ShooterCommand(ShooterSubsystem shooterSubsystem, jStickListener rTrigger) {
+  public ShooterCommand(ShooterSubsystem shooterSubsystem, DoubleSupplier rTrigger) {
     m_shooterSubsystem = shooterSubsystem;
     this.m_rTrigger = rTrigger;
     addRequirements(shooterSubsystem); // @TODO this for all commands and respective key subsystems
   }
 
-  public void setTargetVelocity(double velocity) {
-    pidController.setSetpoint(velocity);
-    this.velocity = Velocity.ACCELERATING;
-  }
-
-  /**
-   * checks to make sure balls aren't being ejected prematurely super
-   * innefficient, might be cleaned up later
-   */
-  private void containBall() {
-    if ((ballStates.get(0) == BallStates.CONTAINED || ballStates.get(0) == BallStates.LEAVING)
-        && m_shooterSubsystem.getLineBreak()) { // not sure if statement is necessary, since this is called on execute
-                                                // whilst accelerating and not
-      m_shooterSubsystem.setHopupVelocity(-0.1);
-    }
-  }
-
-  private boolean feedBall() {
-      switch(ballState){
-        case:
-      }
-  }
-
-  @Override
-  public void initialize() {
-
-  }
-
-  @Override
-  public void execute() {
-    if (debug) {
-      m_shooterSubsystem.debug();
-    }
-    switch (velocity) {
-    case TARGET:
-      if(feedBall()){
-        velocity=Velocity.MINIMUM;
-      }
-      break;
-    case ACCELERATING:
-      containBall();
-      if (Math.abs(pidController.getSetpoint()) == Math.abs(m_shooterSubsystem.getShooterVelocity()) + 0.05) {
-        velocity = Velocity.TARGET;
-      }
-      m_shooterSubsystem.setShooterVelocity(pidController.calculate(m_shooterSubsystem.getShooterVelocity()));
-      break;
-    case MINIMUM:
-      containBall();
-    }
-  }
-
-  @Override
-  public void end(boolean interrupted) {
-  }
-
-  @Override
-  public boolean isFinished() {
-    return false;
-  }
 }
 
 /**
