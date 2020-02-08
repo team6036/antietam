@@ -16,6 +16,9 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+    public final static class PortConstants {
+        public final static int xboxControllerPort = 1;
+    }
     public final static class ControlPanel {
         public final static class Colors {
             public final static String RED = "red";
@@ -32,9 +35,6 @@ public final class Constants {
             public final static int portSolenoid2B = 1;
             public final static int portSolenoid3A = 2;
             public final static int portSolenoid3B = 3;
-        }
-        public final static class Buttons {
-            public final static int NORMAL = 10;
         }
     }
 }
