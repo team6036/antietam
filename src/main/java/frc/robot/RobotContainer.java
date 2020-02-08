@@ -17,8 +17,10 @@ import frc.robot.subsystems.AccumulatorSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -47,11 +49,12 @@ public class RobotContainer {
   public final static int portSolenoid3B = 9;
 
   public final static XboxController Xbox = new XboxController(RobotContainer.joystickPort);
+
   private final AccumulatorCommand m_accumulatorCommand = new AccumulatorCommand(m_accumulatorSubsystem, Xbox);
-  public static Button xboxRightBump = new JoystickButton(Xbox, 6);
-  public Button xboxLeftBump = new JoystickButton(Xbox, 5);
-  public final static DigitalInput LineBreakSensor= new DigitalInput(LineBreakSensorID);  //Idk if it should be digital input or output
   
+  
+  private final JoystickButton LeftBumper = new JoystickButton(Xbox, 5);
+  private final JoystickButton RightBumper = new JoystickButton(Xbox, 6);
 
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
@@ -71,7 +74,8 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    
+    LeftBumper.whenPressed(new InstantCommand(() -> m_accumulatorSubsystem.extend()));
+    RightBumper.whenPressed(new InstantCommand(() -> m_accumulatorSubsystem.retract()));
   }
 
 
