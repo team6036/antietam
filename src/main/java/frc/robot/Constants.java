@@ -27,6 +27,12 @@ public final class Constants {
         public final static class Motor {
             public final static int CHANNEL = 1;
         }
+        public final static class Piston {
+            public final static int portSolenoid2A = 0;
+            public final static int portSolenoid2B = 1;
+            public final static int portSolenoid3A = 2;
+            public final static int portSolenoid3B = 3;
+        }
         public final static class Buttons {
             public final static int NORMAL = 10;
         }

@@ -1,7 +1,10 @@
 package frc.robot.subsystems;
 
+import frc.robot.Robot;
 import frc.robot.Constants.ControlPanel.Colors;
 import frc.robot.Constants.ControlPanel.Motor;
+import frc.robot.Constants.ControlPanel.Piston;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -15,6 +18,7 @@ import java.util.Arrays;
 import edu.wpi.first.wpilibj.VictorSP;
 
 public class ControlPanelSubsystem extends SubsystemBase {
+    // Control Panel variables
     private final ArrayList<String> controlPanel;
     private final I2C.Port i2cPort = I2C.Port.kOnboard;
     private final ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);
@@ -26,6 +30,10 @@ public class ControlPanelSubsystem extends SubsystemBase {
     private       Color currentColor = kBlueTarget;
     private       String currentColorString = "";
     private final VictorSP motor = new VictorSP(Motor.CHANNEL);
+    // Piston variables
+    private PistonState pistonState = PistonState.RETRACTED;
+    private DoubleSolenoid solenoidLiftFront = new DoubleSolenoid(Piston.portSolenoid2A, Piston.portSolenoid2B);
+    private DoubleSolenoid solenoidLiftBack = new DoubleSolenoid(Piston.portSolenoid3A, Piston.portSolenoid3B);
 
     public ControlPanelSubsystem() {
         controlPanel = new ArrayList<String>(Arrays.asList(Colors.RED, Colors.YELLOW, Colors.BLUE, Colors.GREEN));
@@ -33,6 +41,30 @@ public class ControlPanelSubsystem extends SubsystemBase {
         m_colorMatcher.addColorMatch(kGreenTarget);
         m_colorMatcher.addColorMatch(kRedTarget);
         m_colorMatcher.addColorMatch(kYellowTarget);
+    }
+
+    public static enum PistonState {
+        EXTENDED, RETRACTED
+    }
+
+    public final PistonState getPistonState() {
+        return pistonState;
+    }
+
+    public final void extendPiston() {
+        solenoidLiftFront.set(DoubleSolenoid.Value.kForward);
+        solenoidLiftBack.set(DoubleSolenoid.Value.kForward);
+        pistonState = PistonState.EXTENDED;
+        SmartDashboard.putString("{Control Panel}: Front Lift Piston = ", "ENGAGED");
+        SmartDashboard.putString("{Control Panel}: Back Lift Piston  = ", "ENGAGED");
+    }
+
+    public final void retractPiston() {
+        solenoidLiftFront.set(DoubleSolenoid.Value.kReverse);
+        solenoidLiftBack.set(DoubleSolenoid.Value.kReverse);
+        pistonState = PistonState.RETRACTED;
+        SmartDashboard.putString("{Control Panel}: Front Lift Piston = ", "DISENGAGED");
+        SmartDashboard.putString("{Control Panel}: Back Lift Piston  = ", "DISENGAGED");
     }
 
     public final boolean halfRotation(String c1, String c2) {
