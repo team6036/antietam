@@ -7,6 +7,11 @@
 
 package frc.robot;
 
+import frc.robot.RobotContainer;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+
+
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants.  This class should not be used for any other purpose.  All constants should be
@@ -16,4 +21,7 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+	
+    public static DoubleSolenoid solenoidLiftFront = new DoubleSolenoid(RobotContainer.portSolenoid2A, RobotContainer.portSolenoid2B);
+    public static DoubleSolenoid solenoidLiftBack = new DoubleSolenoid(RobotContainer.portSolenoid3A, RobotContainer.portSolenoid3B);
 }
