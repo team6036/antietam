@@ -5,12 +5,17 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 
+
+enum Mode {
+    TURN_3_TO_5_TIMES, TURN_TO_NEAREST_COLOR
+}
+
 public class ControlPanelCommand extends CommandBase {
     private final ControlPanelSubsystem m_controlPanel;
     private String targetColor;
     private String c1, c2;
     private double numRotations = 0;
-    private int mode = 0;
+    private Mode mode = Mode.TURN_3_TO_5_TIMES;
     public ControlPanelCommand(ControlPanelSubsystem controlPanel) {
         this.m_controlPanel = controlPanel;
         addRequirements(controlPanel);
@@ -19,11 +24,11 @@ public class ControlPanelCommand extends CommandBase {
     // Called when command is initialized. Only runs once
     @Override
     public void initialize() {
-        if (mode == 0) {
+        if (mode == Mode.TURN_3_TO_5_TIMES) {
             m_controlPanel.setMotorSpeed(1);
             c1 = m_controlPanel.getCurrentColor();
         }
-        else if (mode == 1) {
+        else if (mode == Mode.TURN_TO_NEAREST_COLOR) {
             targetColor = m_controlPanel.getTargetColor();
             Integer rotations = m_controlPanel.position();
             if (rotations > 0) 
@@ -35,7 +40,7 @@ public class ControlPanelCommand extends CommandBase {
 
     @Override
     public void execute() {
-        if (mode == 0) {
+        if (mode == Mode.TURN_3_TO_5_TIMES) {
             c2 = m_controlPanel.getCurrentColor();
             if (m_controlPanel.halfRotation(c1, c2))
                 numRotations += 0.5;
@@ -44,8 +49,8 @@ public class ControlPanelCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        if (mode == 0 && numRotations > 3 && numRotations < 5) {
-            mode = 1;
+        if (mode == Mode.TURN_3_TO_5_TIMES && numRotations > 3 && numRotations < 5) {
+            mode = Mode.TURN_TO_NEAREST_COLOR;
             return true;
         }
         return targetColor.equals(m_controlPanel.getCurrentColor());
