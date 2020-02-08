@@ -1,8 +1,8 @@
 package frc.robot.commands;
 
+import frc.robot.Constants.ControlPanel.Motor;
 import frc.robot.subsystems.ControlPanelSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 
 
@@ -13,7 +13,7 @@ enum Mode {
 public class ControlPanelCommand extends CommandBase {
     private final ControlPanelSubsystem m_controlPanel;
     private String targetColor;
-    private String c1, c2;
+    private String c1;
     private double numRotations = 0;
     private Mode mode = Mode.TURN_3_TO_5_TIMES;
     public ControlPanelCommand(ControlPanelSubsystem controlPanel) {
@@ -25,25 +25,26 @@ public class ControlPanelCommand extends CommandBase {
     @Override
     public void initialize() {
         if (mode == Mode.TURN_3_TO_5_TIMES) {
-            m_controlPanel.setMotorSpeed(1);
+            m_controlPanel.setMotorSpeed(Motor.SPEED);
             c1 = m_controlPanel.getCurrentColor();
         }
         else if (mode == Mode.TURN_TO_NEAREST_COLOR) {
             targetColor = m_controlPanel.getTargetColor();
             Integer rotations = m_controlPanel.position();
             if (rotations > 0) 
-                m_controlPanel.setMotorSpeed(1);
+                m_controlPanel.setMotorSpeed(Motor.SPEED);
             else
-                m_controlPanel.setMotorSpeed(-1);
+                m_controlPanel.setMotorSpeed(-Motor.SPEED);
         }
     }
 
     @Override
     public void execute() {
         if (mode == Mode.TURN_3_TO_5_TIMES) {
-            c2 = m_controlPanel.getCurrentColor();
-            if (m_controlPanel.halfRotation(c1, c2))
+            if (m_controlPanel.halfRotation(c1, m_controlPanel.getCurrentColor())) {
+                c1 = m_controlPanel.getCurrentColor();
                 numRotations += 0.5;
+            }
         }
     }
 

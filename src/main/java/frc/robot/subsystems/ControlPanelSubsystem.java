@@ -1,33 +1,25 @@
 package frc.robot.subsystems;
 
-import frc.robot.Robot;
+import java.util.ArrayList;
+import java.util.Arrays;
+import com.revrobotics.ColorMatchResult;
+import com.revrobotics.ColorSensorV3;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.VictorSP;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ControlPanel.Colors;
 import frc.robot.Constants.ControlPanel.Motor;
 import frc.robot.Constants.ControlPanel.Piston;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj.util.Color;
-import com.revrobotics.ColorSensorV3;
-import com.revrobotics.ColorMatchResult;
-import com.revrobotics.ColorMatch;
-import edu.wpi.first.wpilibj.I2C;
-import java.util.ArrayList;
-import java.util.Arrays;
-import edu.wpi.first.wpilibj.VictorSP;
 
 public class ControlPanelSubsystem extends SubsystemBase {
     // Control Panel variables
     private final ArrayList<String> controlPanel;
-    private final I2C.Port i2cPort = I2C.Port.kOnboard;
-    private final ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);
-    private final ColorMatch m_colorMatcher = new ColorMatch();
-    private final Color kBlueTarget = ColorMatch.makeColor(0.143, 0.427, 0.429);
-    private final Color kGreenTarget = ColorMatch.makeColor(0.197, 0.561, 0.240);
-    private final Color kRedTarget = ColorMatch.makeColor(0.561, 0.232, 0.114);
-    private final Color kYellowTarget = ColorMatch.makeColor(0.361, 0.524, 0.113);
-    private       Color currentColor = kBlueTarget;
+    private final ColorSensorV3 m_colorSensor = new ColorSensorV3(I2C.Port.kOnboard);
+    private       Color currentColor = Colors.kBlueTarget;
     private       String currentColorString = "";
     private final VictorSP motor = new VictorSP(Motor.CHANNEL);
     // Piston variables
@@ -37,10 +29,10 @@ public class ControlPanelSubsystem extends SubsystemBase {
 
     public ControlPanelSubsystem() {
         controlPanel = new ArrayList<String>(Arrays.asList(Colors.RED, Colors.YELLOW, Colors.BLUE, Colors.GREEN));
-        m_colorMatcher.addColorMatch(kBlueTarget);
-        m_colorMatcher.addColorMatch(kGreenTarget);
-        m_colorMatcher.addColorMatch(kRedTarget);
-        m_colorMatcher.addColorMatch(kYellowTarget);
+        Colors.ColorMatcher.addColorMatch(Colors.kBlueTarget);
+        Colors.ColorMatcher.addColorMatch(Colors.kGreenTarget);
+        Colors.ColorMatcher.addColorMatch(Colors.kRedTarget);
+        Colors.ColorMatcher.addColorMatch(Colors.kYellowTarget);
     }
 
     public static enum PistonState {
@@ -68,7 +60,7 @@ public class ControlPanelSubsystem extends SubsystemBase {
     }
 
     public final boolean halfRotation(String c1, String c2) {
-        return c1.equals(c2);
+        return (c1.equals(Colors.RED) && c2.equals(Colors.GREEN)) || (c1.equals(Colors.GREEN) && c2.equals(Colors.RED));
     }
 
     public final Integer position() {
@@ -83,16 +75,16 @@ public class ControlPanelSubsystem extends SubsystemBase {
     }
 
     public final void updateCurrentColor() {
-        ColorMatchResult match = m_colorMatcher.matchClosestColor(m_colorSensor.getColor());
-        if (match.color == kBlueTarget || match.color == kRedTarget || match.color == kGreenTarget || match.color == kYellowTarget) {
+        ColorMatchResult match = Colors.ColorMatcher.matchClosestColor(m_colorSensor.getColor());
+        if (match.color == Colors.kBlueTarget || match.color == Colors.kRedTarget || match.color == Colors.kGreenTarget || match.color == Colors.kYellowTarget) {
             currentColor = match.color;
-            if (match.color == kBlueTarget)
+            if (match.color == Colors.kBlueTarget)
                 currentColorString = Colors.BLUE;
-            if (match.color == kRedTarget)
+            if (match.color == Colors.kRedTarget)
                 currentColorString = Colors.RED;
-            if (match.color == kGreenTarget)
+            if (match.color == Colors.kGreenTarget)
                 currentColorString = Colors.GREEN;
-            if (match.color == kYellowTarget)
+            if (match.color == Colors.kYellowTarget)
                 currentColorString = Colors.YELLOW;
         }
         else
@@ -101,9 +93,6 @@ public class ControlPanelSubsystem extends SubsystemBase {
 
     public final void setMotorSpeed(double speed) {
         motor.setSpeed(speed);
-    }
-    public final void getMotorSpeed(double speed) {
-        motor.getSpeed();
     }
 
     public final String getTargetColor() {
