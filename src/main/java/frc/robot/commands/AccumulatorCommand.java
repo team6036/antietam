@@ -21,10 +21,12 @@ public class AccumulatorCommand extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final AccumulatorSubsystem m_accumulator;
   private final XboxController m_xbox;
-  public static boolean sensor;
+  private static boolean PreviousValue = false;
+  private static boolean PresentValue;
   private static int ballsEntered = 0;
-  private static double RightBumperState;
-  private static boolean LeftBumperState;
+  
+  
+ 
 
 
   /**
@@ -77,21 +79,26 @@ public class AccumulatorCommand extends CommandBase {
       }
       else {
           end(true);   //idk what happens if u put false here
+      if (PreviousValue = true){
+          PresentValue = m_accumulator.LineBreakSensor.get();
+          if (PresentValue = false){
+              PreviousValue = false;
+          }
+      if (PreviousValue = false){
+          PresentValue = m_accumulator.LineBreakSensor.get();
+          if (PresentValue = true){
+                PreviousValue = true;
+                ballsEntered += 1;
+            }
+          
       }
-
-      LeftBumperState = RobotContainer.Xbox.getBumperPressed(Hand.kLeft);
-      RightBumperState = RobotContainer.Xbox.getTriggerAxis(Hand.kRight);
-      if (RightBumperState > 0.05) {     //0.05 is a random value
-          RetractAccumulator();
-      }
-      if (LeftBumperState = true) {
-          ExtendAccumulator();
     }
-      sensor = m_accumulator.getSensorState();
-      if (sensor = true){
-          ballsEntered += 1;
+}
 
-      }
+    
+     
+
+      
       
 
       

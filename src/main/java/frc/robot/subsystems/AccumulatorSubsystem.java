@@ -1,6 +1,6 @@
 package frc.robot.subsystems;
 
-
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -19,6 +19,8 @@ public class AccumulatorSubsystem extends SubsystemBase {
   
   private DoubleSolenoid solenoid1 = Constants.solenoidLiftFront;
   private DoubleSolenoid solenoid2 = Constants.solenoidLiftBack;
+  public static boolean sensor;
+  public final DigitalInput LineBreakSensor= new DigitalInput(RobotContainer.LineBreakSensorID);  //Idk if it should be digital input or output
 
   /**
    * Creates a new ExampleSubsystem.
@@ -44,7 +46,7 @@ public class AccumulatorSubsystem extends SubsystemBase {
   private State state = State.RETRACTED;
   
   public boolean getSensorState() {
-      return RobotContainer.LineBreakSensor.get();   //get() returns True False
+      return LineBreakSensor.get();   //get() returns True False
   }
 
   
@@ -59,7 +61,7 @@ public class AccumulatorSubsystem extends SubsystemBase {
     solenoid2.set(DoubleSolenoid.Value.kReverse);
     state = State.RETRACTED;
   }
-
+ 
   
   @Override
   public void periodic() {
