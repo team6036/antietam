@@ -15,20 +15,18 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class LimelightCommand extends CommandBase {
   private LimelightSubsystem m_limelightSubsystem;
   private DrivetrainSubsystem m_drivetrainSubsystem;
-  private ShooterSubsystem m_shooterSubsystem;
 
-  private final static double verticalKP = LimelightConstants.verticalKP;
-  private final static double horizontalKP = LimelightConstants.horizontalKP;
   private final static double targetDistance = LimelightConstants.targetDistance;
+  private final static double KpAim = -0.1;
+  private final static double KpDistance = -0.1;
+  private final static double min_aim_command = 0.05;
+
+  private static double leftPower = 0;
+  private static double rightPower = 0;
+
   private final static boolean debug = LimelightConstants.debug;
 
-  private double horizontalPower = 0;
-  private double verticalPower = 0;
-  private double horizontalError;
-  private double verticalError;
-
-  public LimelightCommand(LimelightSubsystem m_limelightSubsystem, DrivetrainSubsystem m_drivetrainSubsystem,
-      ShooterSubsystem m_shooterSubsystem) {
+  public LimelightCommand(LimelightSubsystem m_limelightSubsystem, DrivetrainSubsystem m_drivetrainSubsystem) {
     this.m_limelightSubsystem = m_limelightSubsystem;
     this.m_drivetrainSubsystem = m_drivetrainSubsystem;
     addRequirements(m_limelightSubsystem);
@@ -49,7 +47,7 @@ public class LimelightCommand extends CommandBase {
     if (debug) {
       m_limelightSubsystem.debug();
     }
-    approachTarget(targetDistance);
+    approachTarget();
   }
 
   // Called once the command ends or is interrupted.
@@ -65,27 +63,35 @@ public class LimelightCommand extends CommandBase {
   }
 
   // simply for testing, will turn to and approach target.
-  private void approachTarget(double targetDistance) {
-    // turn
+  private void approachTarget() {
     if (m_limelightSubsystem.ta() != 0) {
-      if (Math.abs(m_limelightSubsystem.tx()) > 0.5) {
-        horizontalError = m_limelightSubsystem.tx();
-        SmartDashboard.putNumber("Horizontal Error", horizontalError);
-        horizontalPower += horizontalError * horizontalKP;
+      double tx = m_limelightSubsystem.tx();
+      double dist = m_limelightSubsystem.getDistance();
+      double heading_error = -tx;
+      double distance_error = -dist - targetDistance;
+      double steering_adjust = 0.;
+
+      /**
+       * if above deadband, steering adjust +- adjusted error
+       */
+      if (tx > 1.0) {
+        steering_adjust = KpAim * heading_error - min_aim_command;
+      } else if (tx < 1.0) {
+        steering_adjust = KpAim * heading_error + min_aim_command;
       }
-      else{
-        horizontalPower = 0;
-      }
-      verticalError = m_limelightSubsystem.getDistance() - targetDistance;
-      SmartDashboard.putNumber("Vertical Error", verticalError);
-      verticalPower += verticalError * verticalKP;
-      //m_drivetrainSubsystem.drive(verticalPower, horizontalPower);
+
+      /**
+       * fix dist error
+       */
+      double distance_adjust = KpDistance * distance_error;
+
+      leftPower += steering_adjust + distance_adjust;
+      rightPower -= steering_adjust + distance_adjust;
+    } else{
+      leftPower = -0.1;
+      rightPower = -0.1;
     }
-    else if (m_limelightSubsystem.ta() == 0) {
-      verticalPower = 0;
-      horizontalPower = 0;
-      System.out.println("beep");
-      m_drivetrainSubsystem.drive(0.1, 0);
-    }
+    SmartDashboard.putNumber("leftPower", leftPower);
+    SmartDashboard.putNumber("rightPower", rightPower);
   }
 }

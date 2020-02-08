@@ -34,16 +34,15 @@ public class RobotContainer {
   private final Joystick m_joystick = new Joystick(Constants.joystickPort);
   private final XboxController m_controller = new XboxController(Constants.xboxPort);
 
-  private final AccumulatorSubsystem m_accumulatorSubsystem = new AccumulatorSubsystem();
-  private final ClimberSubsystem m_climberSubsystem = new ClimberSubsystem();
+  //private final AccumulatorSubsystem m_accumulatorSubsystem = new AccumulatorSubsystem();
+  //private final ClimberSubsystem m_climberSubsystem = new ClimberSubsystem();
   private final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
   private final LimelightSubsystem m_limelightSubsystem = new LimelightSubsystem();
-  private final ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem(); 
+  //private final ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem(); 
 
-  private final DrivetrainCommand m_drivetrainCommand = new DrivetrainCommand(m_drivetrainSubsystem, m_joystick);
-  private final LimelightCommand m_limelightCommand = new LimelightCommand(m_limelightSubsystem, m_drivetrainSubsystem,
-      m_shooterSubsystem);
-  private final ShooterCommand m_shooterCommand = new ShooterCommand(m_shooterSubsystem, m_controller);
+  //private final DrivetrainCommand m_drivetrainCommand = new DrivetrainCommand(m_drivetrainSubsystem, m_joystick);
+  private final LimelightCommand m_limelightCommand = new LimelightCommand(m_limelightSubsystem, m_drivetrainSubsystem);
+  //private final ShooterCommand m_shooterCommand = new ShooterCommand(m_shooterSubsystem, m_controller);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
