@@ -59,10 +59,6 @@ public class ControlPanelSubsystem extends SubsystemBase {
         SmartDashboard.putString("{Control Panel}: Back Lift Piston  = ", "DISENGAGED");
     }
 
-    // public final boolean halfRotation(String c1, String c2) {
-    //     return (c1.equals(Colors.RED) && c2.equals(Colors.GREEN)) || (c1.equals(Colors.GREEN) && c2.equals(Colors.RED));
-    // }
-
     public final Integer position() {
         String targetColorString = getTargetColor() ;
         if (targetColorString.equals(Colors.UNKNOWN))
