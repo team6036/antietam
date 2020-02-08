@@ -46,7 +46,7 @@ public class LimelightCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(debug){
+    if (debug) {
       m_limelightSubsystem.debug();
     }
     approachTarget(targetDistance);
@@ -68,15 +68,24 @@ public class LimelightCommand extends CommandBase {
   private void approachTarget(double targetDistance) {
     // turn
     if (m_limelightSubsystem.ta() != 0) {
-      horizontalError = m_limelightSubsystem.tx();
-      SmartDashboard.putNumber("Horizontal Error", horizontalError);
-      horizontalPower += horizontalError * horizontalKP;
-      m_drivetrainSubsystem.drive(horizontalKP * horizontalPower, horizontalPower); // Note, this may need to be flipped
-      
+      if (Math.abs(m_limelightSubsystem.tx()) > 0.5) {
+        horizontalError = m_limelightSubsystem.tx();
+        SmartDashboard.putNumber("Horizontal Error", horizontalError);
+        horizontalPower += horizontalError * horizontalKP;
+      }
+      else{
+        horizontalPower = 0;
+      }
       verticalError = m_limelightSubsystem.getDistance() - targetDistance;
       SmartDashboard.putNumber("Vertical Error", verticalError);
       verticalPower += verticalError * verticalKP;
-      m_drivetrainSubsystem.drive(verticalPower, 0);
+      //m_drivetrainSubsystem.drive(verticalPower, horizontalPower);
+    }
+    else if (m_limelightSubsystem.ta() == 0) {
+      verticalPower = 0;
+      horizontalPower = 0;
+      System.out.println("beep");
+      m_drivetrainSubsystem.drive(0.1, 0);
     }
   }
 }

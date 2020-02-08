@@ -51,8 +51,8 @@ public class RobotContainer {
    * @NOTE: Do not touch the scheduler call unless you know what you're doing.
    */
   public RobotContainer() {
-    CommandScheduler.getInstance().setDefaultCommand(m_drivetrainSubsystem, m_drivetrainCommand);
-    CommandScheduler.getInstance().setDefaultCommand(m_shooterSubsystem, m_shooterCommand);
+    //CommandScheduler.getInstance().setDefaultCommand(m_drivetrainSubsystem, m_drivetrainCommand);
+    //CommandScheduler.getInstance().setDefaultCommand(m_shooterSubsystem, m_shooterCommand);
     CommandScheduler.getInstance().setDefaultCommand(m_limelightSubsystem, m_limelightCommand);
     // Configure the button bindings
     configureButtonBindings();
