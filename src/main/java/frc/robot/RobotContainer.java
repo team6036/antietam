@@ -15,12 +15,10 @@ import edu.wpi.first.wpilibj.GenericHID.Hand;
 import frc.robot.subsystems.AccumulatorSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
-import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.HoodSubsystem;
 import frc.robot.subsystems.TurretSubsystem;
 import frc.robot.commands.DrivetrainCommand;
-import frc.robot.commands.LimelightCommand;
 import frc.robot.commands.ShooterCommand;
 import frc.robot.commands.TurretCommand;
 import frc.robot.commands.HoodCommand;
@@ -42,59 +40,24 @@ public class RobotContainer {
 
   private final Joystick m_joystick = new Joystick(Constants.joystickPort);
   private final XboxController m_controller = new XboxController(Constants.xboxPort);
+
   private final JoystickButton m_xButton = new JoystickButton(m_controller, 3);
   private final JoystickButton m_aButton = new JoystickButton(m_controller, 1);
-
-  private final DoubleSupplier m_rTrigger = new DoubleSupplier() {
-    @Override
-    public double getAsDouble() {
-      return m_controller.getTriggerAxis(Hand.kRight);
-    }
-  };
-  private final DoubleSupplier m_lXboxStick = new DoubleSupplier() {
-    @Override
-    public double getAsDouble() {
-      return m_controller.getY(Hand.kLeft);
-    }
-  };
-  private final DoubleSupplier m_rXboxStick = new DoubleSupplier() {
-
-    @Override
-    public double getAsDouble() {
-      return m_controller.getY(Hand.kRight);
-    }
-  };
-  private final DoubleSupplier m_bigStickX = new DoubleSupplier() {
-
-    @Override
-    public double getAsDouble() {
-      return m_joystick.getX();
-    }
-  };
-  private final DoubleSupplier m_bigStickY = new DoubleSupplier() {
-
-    @Override
-    public double getAsDouble() {
-      return m_joystick.getY();
-    }
-  };
 
   private final AccumulatorSubsystem m_accumulatorSubsystem = new AccumulatorSubsystem();
   private final ClimberSubsystem m_climberSubsystem = new ClimberSubsystem();
   private final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
-  private final LimelightSubsystem m_limelightSubsystem = new LimelightSubsystem();
   private final ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem();
   private final TurretSubsystem m_turretSubsystem = new TurretSubsystem();
   private final HoodSubsystem m_hoodSubsystem = new HoodSubsystem();
 
-  private final DrivetrainCommand m_drivetrainCommand = new DrivetrainCommand(m_drivetrainSubsystem, m_joystick);
-  private final LimelightCommand m_limelightCommand = new LimelightCommand(m_limelightSubsystem, m_drivetrainSubsystem,
-      m_shooterSubsystem);
-  private final ShooterCommand m_shooterCommand = new ShooterCommand(m_shooterSubsystem, m_rTrigger);
-  private final TurretCommand m_turretCommand = new TurretCommand(m_turretSubsystem, m_limelightSubsystem,
-      m_lXboxStick);
-  private final HoodCommand m_hoodCommand = new HoodCommand(m_hoodSubsystem, m_limelightSubsystem, m_rXboxStick,
-      m_aButton);
+  private final DrivetrainCommand m_drivetrainCommand = new DrivetrainCommand(m_drivetrainSubsystem,
+      () -> m_joystick.getY(), () -> m_joystick.getX());
+  private final ShooterCommand m_shooterCommand = new ShooterCommand(m_shooterSubsystem,
+      () -> m_controller.getTriggerAxis(Hand.kRight));
+  private final TurretCommand m_turretCommand = new TurretCommand(m_turretSubsystem,
+      () -> m_controller.getY(Hand.kLeft));
+  private final HoodCommand m_hoodCommand = new HoodCommand(m_hoodSubsystem, () -> m_controller.getY(Hand.kRight));
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -104,7 +67,6 @@ public class RobotContainer {
   public RobotContainer() {
     CommandScheduler.getInstance().setDefaultCommand(m_drivetrainSubsystem, m_drivetrainCommand);
     CommandScheduler.getInstance().setDefaultCommand(m_shooterSubsystem, m_shooterCommand);
-    CommandScheduler.getInstance().setDefaultCommand(m_limelightSubsystem, m_limelightCommand);
     // Configure the button bindings
     configureButtonBindings();
   }
@@ -117,6 +79,7 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     m_xButton.whenPressed(new InstantCommand(() -> changeTargetingState()));
+    m_aButton.whenPressed(new InstantCommand(() -> m_hoodCommand.zero()));
   }
 
   private void changeTargetingState() {

@@ -7,7 +7,7 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.Joystick;
+import java.util.function.DoubleSupplier;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
  */
 public class DrivetrainCommand extends CommandBase {
 
-  private final Joystick joystick;
+  private DoubleSupplier getX, getY;
   private final DrivetrainSubsystem m_drivetrain;
 
   /**
@@ -24,11 +24,10 @@ public class DrivetrainCommand extends CommandBase {
    * 
    * The subsystem used by this command.
    */
-  public DrivetrainCommand(DrivetrainSubsystem drivetrain, Joystick joystick) {
-
+  public DrivetrainCommand(DrivetrainSubsystem drivetrain, DoubleSupplier getY, DoubleSupplier getX){
+    this.getY = getY;
+    this.getX = getX;
     m_drivetrain = drivetrain;
-    this.joystick = joystick;
-
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drivetrain);
   }
@@ -41,7 +40,7 @@ public class DrivetrainCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_drivetrain.drive(joystick.getY(), joystick.getX());
+    m_drivetrain.drive(getY.getAsDouble(), getX.getAsDouble());
   }
 
   // Called once the command ends or is interrupted.

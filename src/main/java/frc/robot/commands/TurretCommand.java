@@ -3,7 +3,7 @@ package frc.robot.commands;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.LimelightSubsystem;
+import frc.robot.Limelight;
 import frc.robot.subsystems.TurretSubsystem;
 
 import frc.robot.Constants.TargetingGroupConstants;
@@ -12,7 +12,6 @@ public class TurretCommand extends CommandBase {
     private boolean autoTarget = TargetingGroupConstants.autoTarget;
 
     private TurretSubsystem m_turretSubsystem;
-    private LimelightSubsystem m_limelightSubsystem;
     private DoubleSupplier jStick;
 
     /**
@@ -21,10 +20,9 @@ public class TurretCommand extends CommandBase {
      * @param m_limlightSubsystem the feedback device for auto aiming
      * @param jStick input device for manual aiming.
      */
-    public TurretCommand(TurretSubsystem m_turretSubsystem, LimelightSubsystem m_limlightSubsystem,
+    public TurretCommand(TurretSubsystem m_turretSubsystem,
             DoubleSupplier jStick) {
         this.m_turretSubsystem = m_turretSubsystem;
-        this.m_limelightSubsystem = m_limlightSubsystem;
         this.jStick = jStick;
     }
 
@@ -43,10 +41,10 @@ public class TurretCommand extends CommandBase {
     public void execute() {
         if (autoTarget) {
             boolean exists = false;
-            if (m_limelightSubsystem.ta() != 0) {
+            if (Limelight.ta() != 0) {
                 exists = true;
             }
-            m_turretSubsystem.autoTarget(m_limelightSubsystem.tx(), exists);
+            m_turretSubsystem.autoTarget(Limelight.tx(), exists);
         } else {
             m_turretSubsystem.turn(jStick.getAsDouble());
         }
