@@ -33,7 +33,7 @@ public class LimelightSubsystem extends SubsystemBase {
         return retval;
     }
     public double getDistance() {
-        return NetworkTableInstance.getDefault().getTable("limelight").getEntry("camtran")
+        return -NetworkTableInstance.getDefault().getTable("limelight").getEntry("camtran")
                 .getDoubleArray(new double[] {})[2];
     }
     // sends all of the crap
