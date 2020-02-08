@@ -7,11 +7,18 @@
 
 package frc.robot;
 
+import frc.robot.Constants.PortConstants;
+import frc.robot.subsystems.ControlPanelSubsystem;
+import frc.robot.commands.ControlPanelCommand;
+import frc.robot.commands.PistonExtensionCommand;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.commands.ExampleCommand;
-import frc.robot.subsystems.ExampleSubsystem;
-import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+
+
+
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -21,19 +28,21 @@ import edu.wpi.first.wpilibj2.command.Command;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-
-  private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
-
+  private final XboxController xbox = new XboxController(PortConstants.xboxControllerPort);
+  private final JoystickButton xbox_y = new JoystickButton(xbox, 4);
+  private final JoystickButton xbox_b = new JoystickButton(xbox, 2);
+  private final ControlPanelSubsystem m_controlpanelSubsystem = new ControlPanelSubsystem();
+  private final ControlPanelCommand m_controlpanelCommand = new ControlPanelCommand(m_controlpanelSubsystem);
+  private final PistonExtensionCommand m_pistonExtensionCommand = new PistonExtensionCommand(m_controlpanelSubsystem);
 
 
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    // Configure the button bindings
     configureButtonBindings();
   }
+
 
   /**
    * Use this method to define your button->command mappings.  Buttons can be created by
@@ -42,16 +51,7 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-  }
-
-
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
-  public Command getAutonomousCommand() {
-    // An ExampleCommand will run in autonomous
-    return m_autoCommand;
+    xbox_y.whenPressed(m_pistonExtensionCommand);
+    xbox_b.whenPressed(m_controlpanelCommand);
   }
 }
