@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import frc.robot.commands.AccumulatorCommand;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.AccumulatorSubsystem;
@@ -50,7 +51,8 @@ public class RobotContainer {
 
   public final static XboxController Xbox = new XboxController(RobotContainer.joystickPort);
 
-  private final AccumulatorCommand m_accumulatorCommand = new AccumulatorCommand(m_accumulatorSubsystem, Xbox);
+
+  private final AccumulatorCommand m_accumulatorCommand = new AccumulatorCommand(m_accumulatorSubsystem, () -> Xbox.getTriggerAxis(Hand.kLeft));
   
   
   private final JoystickButton LeftBumper = new JoystickButton(Xbox, 5);

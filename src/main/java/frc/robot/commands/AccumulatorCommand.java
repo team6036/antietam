@@ -10,6 +10,9 @@ package frc.robot.commands;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.AccumulatorSubsystem;
+
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -20,11 +23,11 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class AccumulatorCommand extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final AccumulatorSubsystem m_accumulator;
-  private final XboxController m_xbox;
+  private final DoubleSupplier m_xbox;
   private static boolean PreviousValue = false;
   private static boolean PresentValue;
   private static int ballsEntered = 0;
-  
+  private static double powerONE;
   
  
 
@@ -34,15 +37,17 @@ public class AccumulatorCommand extends CommandBase {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public AccumulatorCommand(AccumulatorSubsystem accumulator, XboxController XboxControl) {
+  public AccumulatorCommand(AccumulatorSubsystem accumulator, DoubleSupplier supplier) {
     m_accumulator = accumulator;
-    m_xbox = XboxControl;
+    m_xbox = supplier;
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(accumulator);
   }
 
-  // Called when the command is initially scheduled.
+ 
+
+// Called when the command is initially scheduled.
   @Override
   public void initialize() {
   }
@@ -63,7 +68,9 @@ public class AccumulatorCommand extends CommandBase {
     m_accumulator.extend();
 
   }
-
+  public void stopmotor() {
+    m_accumulator.setpower(0,0,0);
+}
   @Override
   public void end(boolean interrupted) {
       m_accumulator.setpower(0,0,0);
@@ -71,25 +78,27 @@ public class AccumulatorCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-      if (RobotContainer.Xbox.getTriggerAxis(Hand.kRight) > 0.05) {
-          flywheels_fowards();
-      }
-      else if (RobotContainer.Xbox.getTriggerAxis(Hand.kLeft) > 0.05) {
-          Unjam();
+    if (PreviousValue = true){
+        PresentValue = m_accumulator.LineBreakSensor.get();
+        if (PresentValue = false){
+            PreviousValue = false;
+        }
+    if (PreviousValue = false){
+        PresentValue = m_accumulator.LineBreakSensor.get();
+        if (PresentValue = true){
+              PreviousValue = true;
+              ballsEntered += 1;
+      if (m_xbox.getAsDouble() > 0.05){
+        flywheels_fowards();
       }
       else {
-          end(true);   //idk what happens if u put false here
-      if (PreviousValue = true){
-          PresentValue = m_accumulator.LineBreakSensor.get();
-          if (PresentValue = false){
-              PreviousValue = false;
+          powerONE = m_accumulator.motorONE.get();
+          if (powerONE == 0.1){
+              stopmotor();
+
           }
-      if (PreviousValue = false){
-          PresentValue = m_accumulator.LineBreakSensor.get();
-          if (PresentValue = true){
-                PreviousValue = true;
-                ballsEntered += 1;
-            }
+
+      }
           
       }
     }

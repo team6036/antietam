@@ -12,9 +12,10 @@ import frc.robot.RobotContainer;
 
 
 public class AccumulatorSubsystem extends SubsystemBase {
-  VictorSP motorONE = new VictorSP(RobotContainer.MotorONEID);
-  VictorSP motorTWO = new VictorSP(RobotContainer.MotorTWOID);
-  VictorSP motorTHREE = new VictorSP(RobotContainer.MotorTHREEID);
+  public VictorSP motorONE = new VictorSP(RobotContainer.MotorONEID);
+  public VictorSP motorTWO = new VictorSP(RobotContainer.MotorTWOID);
+  public VictorSP motorTHREE = new VictorSP(RobotContainer.MotorTHREEID);
+  
   
   
   private DoubleSolenoid solenoid1 = Constants.solenoidLiftFront;
@@ -30,6 +31,7 @@ public class AccumulatorSubsystem extends SubsystemBase {
       motorONE.set(motorpowerone);
       motorTWO.set(motorpowertwo);
       motorTHREE.set(motorpowerthree);
+      
   
   }
   public void stoppower(){
