@@ -25,12 +25,17 @@ public class RobotContainer {
 
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
 
+  private final LoggerSubsystem m_loggerSubsystem = new LoggerSubsystem();
+
+  private final LogToRio m_logToRio = new LogToRio(m_loggerSubsystem);
+
 
 
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+    CommandScheduler.getInstance().setDefaultCommand(m_loggerSubsystem, m_logToRio);
     // Configure the button bindings
     configureButtonBindings();
   }
