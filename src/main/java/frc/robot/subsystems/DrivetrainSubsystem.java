@@ -55,7 +55,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     }
 
     public void lowLevelDrive(double left, double right) {
-        frontLeftMotor.set(left);
+        frontLeftMotor.set(-left);
         frontRightMotor.set(right);
     }
 
