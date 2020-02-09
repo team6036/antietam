@@ -21,16 +21,12 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
  * An example command that uses an example subsystem.
  */
 public class AccumulatorCommand extends CommandBase {
-  @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
+  @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
   private final AccumulatorSubsystem m_accumulator;
   private final DoubleSupplier m_xbox;
-  private static boolean PreviousValue = false;
-  private static boolean PresentValue;
-  private static int ballsEntered = 0;
-  private static double powerONE;
-  
- 
 
+  private static boolean lineBreakSensor = false;
+  private static int ballsEntered = 0;
 
   /**
    * Creates a new ExampleCommand.
@@ -45,78 +41,57 @@ public class AccumulatorCommand extends CommandBase {
     addRequirements(accumulator);
   }
 
- 
-
-// Called when the command is initially scheduled.
+  // Called when the command is initially scheduled.
   @Override
   public void initialize() {
   }
-  public void Unjam() {
-      m_accumulator.setpower(-0.1, -0.1,-0.1);
-  }
-  
-  public void flywheels_fowards() {
-      m_accumulator.setpower(0.1,0.1,0.1);
-  }
-  
-  public void RetractAccumulator(){
-      m_accumulator.retract();
-      
-  }
 
-  public void ExtendAccumulator(){
-    m_accumulator.extend();
-
-  }
-  public void stopmotor() {
-    m_accumulator.setpower(0,0,0);
-}
   @Override
   public void end(boolean interrupted) {
-      m_accumulator.setpower(0,0,0);
+
   }
+
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (PreviousValue = true){
-        PresentValue = m_accumulator.LineBreakSensor.get();
-        if (PresentValue = false){
-            PreviousValue = false;
-        }
-    if (PreviousValue = false){
-        PresentValue = m_accumulator.LineBreakSensor.get();
-        if (PresentValue = true){
-              PreviousValue = true;
-              ballsEntered += 1;
-      if (m_xbox.getAsDouble() > 0.05){
-        flywheels_fowards();
-      }
-      else {
-          powerONE = m_accumulator.motorONE.get();
-          if (powerONE == 0.1){
-              stopmotor();
 
-          }
-
+    if (lineBreakSensor) {
+      // The hop up motor should only run when there is a ball impeding the sensor.
+      // lineBreakSensor is the previous value of the sensor
+      if (m_accumulator.getSensorState()) {
+        // previously the sensor was being impeded, and it is still currently being
+        // impeded, so run hopUpMotor
+        m_accumulator.hopUpMotor.set(0.1);
+      } else {
+        // previsouly the sensor was impeded, it is no longer being impeded, meaning a
+        // ball has gone in
+        ballsEntered++;
       }
-          
+
+    } else {
+      // if the sensor is not being impeded set motorPower to 0
+      if (m_accumulator.hopUpMotor.get() != 0.0) {
+        m_accumulator.hopUpMotor.set(0.0);
       }
     }
-}
+    // finally, update the previous lineBreakSensor value to match the
+    // lineBreakSensor value
+    lineBreakSensor = m_accumulator.getSensorState();
 
-    
-     
-
-      
-      
-
-      
-      
+    // if trigger is being pressed, run flywheel and ballAlignment motors
+    if (m_xbox.getAsDouble() > 0.05) {
+      m_accumulator.flywheelMotor.set(0.1);
+      m_accumulator.ballAlignmentMotor.set(0.1);
+    } else {
+      // trigger is not being pressed, so stop motor power
+      if (m_accumulator.flywheelMotor.get() != 0.0) {
+        m_accumulator.flywheelMotor.set(0.0);
+      }
+    }
   }
 
   // Called once the command ends or is interrupted.
-  
- 
+
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {

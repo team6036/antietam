@@ -7,67 +7,48 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 
-
-
-
-
 public class AccumulatorSubsystem extends SubsystemBase {
-  public VictorSP motorONE = new VictorSP(RobotContainer.MotorONEID);
-  public VictorSP motorTWO = new VictorSP(RobotContainer.MotorTWOID);
-  public VictorSP motorTHREE = new VictorSP(RobotContainer.MotorTHREEID);
-  
-  
-  
-  private DoubleSolenoid solenoid1 = Constants.solenoidLiftFront;
-  private DoubleSolenoid solenoid2 = Constants.solenoidLiftBack;
+  public VictorSP flywheelMotor = new VictorSP(Constants.MotorONEID);
+  public VictorSP ballAlignmentMotor = new VictorSP(Constants.MotorTWOID);
+  public VictorSP hopUpMotor = new VictorSP(Constants.MotorTHREEID);
+
+  public static DoubleSolenoid solenoid1 = new DoubleSolenoid(Constants.portSolenoid2A, Constants.portSolenoid2B);
+  public static DoubleSolenoid solenoid2 = new DoubleSolenoid(Constants.portSolenoid3A, Constants.portSolenoid3B);
+
   public static boolean sensor;
-  public final DigitalInput LineBreakSensor= new DigitalInput(RobotContainer.LineBreakSensorID);  //Idk if it should be digital input or output
-
-  /**
-   * Creates a new ExampleSubsystem.
-   */
-
-  public void setpower(double motorpowerone, double motorpowertwo, double motorpowerthree) {
-      motorONE.set(motorpowerone);
-      motorTWO.set(motorpowertwo);
-      motorTHREE.set(motorpowerthree);
-      
-  
-  }
-  public void stoppower(){
-    motorONE.set(0);
-    motorTWO.set(0);
-    motorTHREE.set(0);
-
-}
-
+  public final DigitalInput LineBreakSensor = new DigitalInput(Constants.LineBreakSensorID);
 
   public enum State {
     EXTENDED, RETRACTED
   }
+
   private State state = State.RETRACTED;
-  
+
   public boolean getSensorState() {
-      return LineBreakSensor.get();   //get() returns True False
+    return LineBreakSensor.get(); // get() returns True False
   }
 
-  
-
   public void extend() {
+    if (state == State.EXTENDED) {
+      return;
+    }
     solenoid1.set(DoubleSolenoid.Value.kForward);
     solenoid2.set(DoubleSolenoid.Value.kForward);
     state = State.EXTENDED;
   }
+
   public void retract() {
+    if (state == State.RETRACTED) {
+      return;
+    }
+
     solenoid1.set(DoubleSolenoid.Value.kReverse);
     solenoid2.set(DoubleSolenoid.Value.kReverse);
     state = State.RETRACTED;
   }
- 
-  
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
   }
-  }
-  
+}
