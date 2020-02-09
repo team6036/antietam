@@ -7,8 +7,6 @@
 
 package frc.robot;
 
-import java.util.function.DoubleSupplier;
-
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
@@ -43,6 +41,7 @@ public class RobotContainer {
 
   private final JoystickButton m_xButton = new JoystickButton(m_controller, 3);
   private final JoystickButton m_aButton = new JoystickButton(m_controller, 1);
+  private final JoystickButton m_threePointButton = new JoystickButton(m_joystick, 11);
 
   private final AccumulatorSubsystem m_accumulatorSubsystem = new AccumulatorSubsystem();
   private final ClimberSubsystem m_climberSubsystem = new ClimberSubsystem();
@@ -78,19 +77,18 @@ public class RobotContainer {
    * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    m_xButton.whenPressed(new InstantCommand(() -> changeTargetingState()));
+    m_xButton.whenPressed(new InstantCommand(() -> manualTarget()));
     m_aButton.whenPressed(new InstantCommand(() -> m_hoodCommand.zero()));
+    m_threePointButton.whenPressed(new InstantCommand(()->threePoint()));
   }
 
-  private void changeTargetingState() {
+  private void threePoint() {
+    TurretCommand.threePoint();
+  }
+
+  private void manualTarget() {
     m_hoodCommand.changeState();
-    m_turretCommand.changeState();
+    TurretCommand.manual();
   }
-
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
 
 }

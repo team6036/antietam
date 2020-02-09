@@ -42,6 +42,10 @@ public class ShooterCommand extends CommandBase {
     addRequirements(shooterSubsystem); // @TODO this for all commands and respective key subsystems
   }
 
+  public void addBall() {
+    ballStates.add(BallStates.CONTAINED);
+  }
+
   @Override
   public void execute() {
     containBall();
@@ -133,21 +137,23 @@ public class ShooterCommand extends CommandBase {
    * another, set all to waiting
    */
   public void handleJoystick() {
-    if(m_rTrigger.getAsDouble()>0.5){
-      for(int i = 0; i<ballStates.size(); i++){
+    if (m_rTrigger.getAsDouble() > 0.5) {
+      for (int i = 0; i < ballStates.size(); i++) {
         ballStates.set(i, BallStates.WAITING);
       }
-    }else if(m_rTrigger.getAsDouble()>0.1){
+      TurretCommand.twoPoint();
+    } else if (m_rTrigger.getAsDouble() > 0.1) {
       ballStates.set(0, BallStates.WAITING);
+      TurretCommand.twoPoint();
     }
   }
 
-/**
- * reset() if next is contained, set velocity to minimum
- */
-public void reset(){
-  if(ballStates.get(0)==BallStates.CONTAINED){
-    velocity = Velocity.MINIMUM;
+  /**
+   * reset() if next is contained, set velocity to minimum
+   */
+  public void reset() {
+    if (ballStates.get(0) == BallStates.CONTAINED) {
+      velocity = Velocity.MINIMUM;
+    }
   }
-}
 }

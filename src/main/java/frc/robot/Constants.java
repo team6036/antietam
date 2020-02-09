@@ -28,8 +28,14 @@ public final class Constants {
     }
 
     public final static class TurretConstants {
+        public static enum TurretMode {
+            THREEPOINT, TWOPOINT, MANUAL;
+        }
+        public static enum TurretState {
+            SEEKING, PIDCONTROL, MANUAL;
+        }
         public static final int motorPort = 0;
-        public static final int[] encoderPorts = new int[] { 0, 0 };
+        public static final int encoderPorts = 0;
         public static final double kp = 0.00001;
     }
 
@@ -38,6 +44,10 @@ public final class Constants {
         public static final int backleftmotorPORT = 2;
         public static final int frontrightmotorPORT = 14;
         public static final int backrightmotorPORT = 15;
+
+        public static enum ControlState {
+            MANUAL, LIMELIGHT, CLIMBER;
+        }
 
         public final static boolean debug = false;
     }

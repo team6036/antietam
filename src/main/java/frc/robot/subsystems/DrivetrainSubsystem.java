@@ -22,11 +22,11 @@ public class DrivetrainSubsystem extends SubsystemBase {
     private static final int frontrightmotorPORT = DrivetrainConstants.frontrightmotorPORT;
     private static final int backrightmotorPORT = DrivetrainConstants.backrightmotorPORT;
 
-    private CANSparkMax frontleftmotor;
-    private CANSparkMax backleftmotor;
+    private CANSparkMax frontLeftMotor;
+    private CANSparkMax backLeftMotor;
 
-    private CANSparkMax frontrightmotor;
-    private CANSparkMax backrightmotor;
+    private CANSparkMax frontRightMotor;
+    private CANSparkMax backRightMotor;
 
     private double Kp = 0.00001;
     private double currentDistance;
@@ -39,24 +39,29 @@ public class DrivetrainSubsystem extends SubsystemBase {
      * Creates a new ExampleSubsystem.
      */
     public DrivetrainSubsystem() {
-        frontleftmotor = new CANSparkMax(frontleftmotorPORT, MotorType.kBrushless);
-        backleftmotor = new CANSparkMax(backleftmotorPORT, MotorType.kBrushless);
-        frontrightmotor = new CANSparkMax(frontrightmotorPORT, MotorType.kBrushless);
-        backrightmotor = new CANSparkMax(backrightmotorPORT, MotorType.kBrushless);
+        frontLeftMotor = new CANSparkMax(frontleftmotorPORT, MotorType.kBrushless);
+        backLeftMotor = new CANSparkMax(backleftmotorPORT, MotorType.kBrushless);
+        frontRightMotor = new CANSparkMax(frontrightmotorPORT, MotorType.kBrushless);
+        backRightMotor = new CANSparkMax(backrightmotorPORT, MotorType.kBrushless);
 
-        backleftmotor.follow(frontleftmotor);
-        backrightmotor.follow(frontrightmotor);
+        backLeftMotor.follow(frontLeftMotor);
+        backRightMotor.follow(frontRightMotor);
 
-        drivetrain = new DifferentialDrive (frontleftmotor, frontrightmotor);
+        drivetrain = new DifferentialDrive(frontLeftMotor, frontRightMotor);
     }
 
     public void drive(double forward, double turn) {
-        drivetrain.arcadeDrive(forward,turn);
+        drivetrain.arcadeDrive(forward, turn);
     }
-    
-    public void debug(){
-        SmartDashboard.putNumber("leftDist", frontleftmotor.getEncoder().getVelocity());
-        SmartDashboard.putNumber("rightDist", frontrightmotor.getEncoder().getVelocity());
+
+    public void lowLevelDrive(double left, double right) {
+        frontLeftMotor.set(left);
+        frontRightMotor.set(right);
+    }
+
+    public void debug() {
+        SmartDashboard.putNumber("leftDist", frontLeftMotor.getEncoder().getVelocity());
+        SmartDashboard.putNumber("rightDist", frontRightMotor.getEncoder().getVelocity());
     }
 
 }
