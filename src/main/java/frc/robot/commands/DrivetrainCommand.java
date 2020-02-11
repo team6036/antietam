@@ -7,25 +7,46 @@
 
 package frc.robot.commands;
 
-import frc.robot.subsystems.ExampleSubsystem;
+import java.util.function.DoubleSupplier;
+import frc.robot.Constants.DrivetrainConstants.ControlState;
+import frc.robot.subsystems.DrivetrainSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /**
  * An example command that uses an example subsystem.
  */
-public class ExampleCommand extends CommandBase {
-  @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private final ExampleSubsystem m_subsystem;
+public class DrivetrainCommand extends CommandBase {
+
+  private DoubleSupplier getX, getY;
+  private final DrivetrainSubsystem m_drivetrain;
+  private static double leftSet, rightSet;
+
+  private ControlState controlState = ControlState.MANUAL;
 
   /**
    * Creates a new ExampleCommand.
-   *
-   * @param subsystem The subsystem used by this command.
+   * 
+   * The subsystem used by this command.
    */
-  public ExampleCommand(ExampleSubsystem subsystem) {
-    m_subsystem = subsystem;
+  public DrivetrainCommand(DrivetrainSubsystem drivetrain, DoubleSupplier getY, DoubleSupplier getX) {
+    this.getY = getY;
+    this.getX = getX;
+    m_drivetrain = drivetrain;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(subsystem);
+    addRequirements(drivetrain);
+  }
+
+  public static void drive(double left, double right) {
+    leftSet = left;
+    rightSet = right;
+  }
+
+  public void changeState(ControlState controlState) {
+    this.controlState = controlState;
+  }
+
+  public ControlState getState() {
+    return controlState;
   }
 
   // Called when the command is initially scheduled.
@@ -36,6 +57,16 @@ public class ExampleCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    switch (controlState) {
+    case MANUAL: {
+      m_drivetrain.drive(getY.getAsDouble(), getX.getAsDouble());
+      return;
+    }
+    default: {
+      m_drivetrain.lowLevelDrive(leftSet, rightSet);
+      return;
+    }
+    }
   }
 
   // Called once the command ends or is interrupted.

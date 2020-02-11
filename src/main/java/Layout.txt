@@ -1,0 +1,16 @@
+Shootercommand passes xbox rt input to shooterSubsystem
+shooterSubsystem has
+    flywheels, hopup motor
+will do
+    Spin up to a velocity based on a JSON file
+    when at velocity, hit hopup motors
+    possibly a method to spin hopup in reverse if the balls passes
+
+HoodCommand passes right jstick in event of input, cancels auto hood in hoodSubsystem
+    hoodSubsystem has a hoodmotor,
+    will have to constantly adjust for distance from JSON
+
+TurretCommand passes left jstick in event of input, cancels auto turret turretSubsystem
+    has turretmotor, constantly follows target
+
+Might need listeners for the joysticks
