@@ -12,18 +12,12 @@ import frc.robot.subsystems.ShooterSubsystem;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.function.DoubleSupplier;
-
+import frc.robot.Constants.ShooterConstants.BallStates;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class ShooterCommand extends CommandBase {
-  private static enum Velocity {
-    MINIMUM, ACCELERATING, TARGET;
-  }
 
-  private static enum BallStates {
-    CONTAINED, WAITING, READY, LEAVING;
-  }
 
   private final boolean debug = ShooterConstants.debug;
   private final double kp = ShooterConstants.kp;
@@ -31,7 +25,7 @@ public class ShooterCommand extends CommandBase {
   private final ShooterSubsystem m_shooterSubsystem;
   private DoubleSupplier m_rTrigger;
 
-  private Velocity velocity = Velocity.MINIMUM;
+
   private ArrayList<BallStates> ballStates = new ArrayList<>(
       Arrays.asList(new BallStates[] { BallStates.CONTAINED, BallStates.CONTAINED, BallStates.CONTAINED }));
   private PIDController pidController = new PIDController(kp, 0, 0);
@@ -48,6 +42,9 @@ public class ShooterCommand extends CommandBase {
 
   @Override
   public void execute() {
+    if(debug){
+      m_shooterSubsystem.debug();
+    }
     containBall();
     shootBall();
     setVelocity();
@@ -114,11 +111,9 @@ public class ShooterCommand extends CommandBase {
     case WAITING: {
       pidController.setSetpoint(0.1); // TODO this needs to be changed
       if (pidController.getSetpoint() == m_shooterSubsystem.getShooterVelocity()) {
-        velocity = Velocity.TARGET;
         ballStates.set(0, BallStates.READY);
       } else {
         m_shooterSubsystem.setShooterVelocity(pidController.calculate(m_shooterSubsystem.getShooterVelocity()));
-        velocity = Velocity.ACCELERATING;
       }
       return;
     }
@@ -153,7 +148,7 @@ public class ShooterCommand extends CommandBase {
    */
   public void reset() {
     if (ballStates.get(0) == BallStates.CONTAINED) {
-      velocity = Velocity.MINIMUM;
+      m_shooterSubsystem.setShooterVelocity(0);
     }
   }
 }

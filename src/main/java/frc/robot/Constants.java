@@ -22,8 +22,12 @@ public final class Constants {
     public final static int xboxPort = 1;
 
     public final static class HoodConstants {
+        public static enum TurnState {
+            ZEROING, MANUAL, AUTOTARGET;
+        }
+
         public static final int motorPort = 0;
-        public static final int[] encoderPorts = new int[] { 0, 0 };
+        public static final int encoderPort = 0;
         public static final double kp = 0.00001;
     }
 
@@ -31,15 +35,18 @@ public final class Constants {
         public static enum TurretMode {
             THREEPOINT, TWOPOINT, MANUAL;
         }
+
         public static enum TurretState {
             SEEKING, PIDCONTROL, MANUAL;
         }
+
         public static final int motorPort = 0;
         public static final int encoderPorts = 0;
         public static final double kp = 0.00001;
     }
 
     public final static class DrivetrainConstants {
+        public static final double kp = 0.00001;
         public static final int frontleftmotorPORT = 1;
         public static final int backleftmotorPORT = 2;
         public static final int frontrightmotorPORT = 14;
@@ -61,6 +68,10 @@ public final class Constants {
     }
 
     public final static class ShooterConstants {
+        public static enum BallStates {
+            CONTAINED, WAITING, READY, LEAVING;
+        }
+
         public static final int firstShooterPort = 0;
         public static final int secondShooterPort = 0;
         public static final int hopupPort = 0;

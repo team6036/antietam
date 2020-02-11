@@ -9,14 +9,13 @@ import frc.robot.subsystems.TurretSubsystem;
 import frc.robot.Constants.TurretConstants.TurretMode;
 import frc.robot.Constants.TurretConstants;
 
-
 public class TurretCommand extends CommandBase {
 
     private TurretSubsystem m_turretSubsystem;
     private DoubleSupplier jStick;
     private double kp = TurretConstants.kp;
     private static TurretMode turretMode = TurretMode.MANUAL;
-    private PIDController pidController = new PIDController(kp,0,0);
+    private PIDController pidController = new PIDController(kp, 0, 0);
 
     /**
      * Simple constructor
@@ -31,21 +30,31 @@ public class TurretCommand extends CommandBase {
         this.jStick = jStick;
     }
 
+    /**
+     * gobally callable; sets turret mode to threePoint
+     */
     public static void threePoint() {
         turretMode = TurretMode.THREEPOINT;
     }
 
+    /**
+     * globally callable; sets turret mode to twoPoint
+     */
     public static void twoPoint() {
         turretMode = TurretMode.TWOPOINT;
     }
 
+    /**
+     * globally callable; sets turret mode to manual
+     */
     public static void manual() {
         turretMode = TurretMode.MANUAL;
     }
 
     /**
-     * Passes the tx necessary to aim at the target, or joystick input Tells the
-     * subsystem to turn accordingly.
+     * If in twopoint mode, turns according to limelight input if in Threepoint
+     * mode, turns the drivetrain to be in line with the camera If in manual mode,
+     * turns according to joystick input
      */
     @Override
     public void execute() {
@@ -65,13 +74,28 @@ public class TurretCommand extends CommandBase {
         }
         }
     }
-    public void autoTarget(double error){
+
+    /**
+     * turns according to a given error/displacement, approaches zero
+     * 
+     * @param error
+     */
+    public void autoTarget(double error) {
         m_turretSubsystem.turn(pidController.calculate(error));
     }
-    public void seek(){
-        //loop
+
+    /**
+     * should seek within a certain range for the target
+     */
+    public void seek() {
+        // loop
     }
-    public void zero(double d){
-        DrivetrainCommand.drive(pidController.calculate(d), -pidController.calculate(d)); //check polarity
+
+    /**
+     * turns drivetrain to match turret,
+     */ 
+    //todo make sure to make the turret turn opposite so the error gets reduced lol
+    public void zero(double d) {
+        DrivetrainCommand.drive(pidController.calculate(d), -pidController.calculate(d)); // check polarity
     }
 }

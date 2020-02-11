@@ -66,6 +66,8 @@ public class RobotContainer {
   public RobotContainer() {
     CommandScheduler.getInstance().setDefaultCommand(m_drivetrainSubsystem, m_drivetrainCommand);
     CommandScheduler.getInstance().setDefaultCommand(m_shooterSubsystem, m_shooterCommand);
+    CommandScheduler.getInstance().setDefaultCommand(m_turretSubsystem, m_turretCommand);
+    CommandScheduler.getInstance().setDefaultCommand(m_hoodSubsystem, m_hoodCommand);
     // Configure the button bindings
     configureButtonBindings();
   }
@@ -78,7 +80,7 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     m_xButton.whenPressed(new InstantCommand(() -> manualTarget()));
-    m_aButton.whenPressed(new InstantCommand(() -> m_hoodCommand.zero()));
+    m_aButton.whenPressed(new InstantCommand(() -> HoodCommand.zero()));
     m_threePointButton.whenPressed(new InstantCommand(()->threePoint()));
   }
 
@@ -87,7 +89,7 @@ public class RobotContainer {
   }
 
   private void manualTarget() {
-    m_hoodCommand.changeState();
+    HoodCommand.manual();
     TurretCommand.manual();
   }
 

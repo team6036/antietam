@@ -24,14 +24,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     private CANSparkMax frontLeftMotor;
     private CANSparkMax backLeftMotor;
-
     private CANSparkMax frontRightMotor;
     private CANSparkMax backRightMotor;
-
-    private double Kp = 0.00001;
-    private double currentDistance;
     private DifferentialDrive drivetrain;
-
 
     // private final DifferentialDrive Drivetrain;
 
