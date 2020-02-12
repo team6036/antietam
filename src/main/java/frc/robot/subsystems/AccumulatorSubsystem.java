@@ -8,15 +8,17 @@ import frc.robot.Constants;
 import frc.robot.RobotContainer;
 
 public class AccumulatorSubsystem extends SubsystemBase {
-  public VictorSP flywheelMotor = new VictorSP(Constants.MotorONEID);
-  public VictorSP ballAlignmentMotor = new VictorSP(Constants.MotorTWOID);
-  public VictorSP hopUpMotor = new VictorSP(Constants.MotorTHREEID);
+  public VictorSP flywheelMotor = new VictorSP(Constants.AccumulatorConstants.flywheelMotorPort);
+  public VictorSP ballAlignmentMotor = new VictorSP(Constants.AccumulatorConstants.ballAlignmentMotorPort);
+  public VictorSP hopUpMotor = new VictorSP(Constants.AccumulatorConstants.hopUpMotorPort);
 
-  public static DoubleSolenoid solenoid1 = new DoubleSolenoid(Constants.portSolenoid2A, Constants.portSolenoid2B);
-  public static DoubleSolenoid solenoid2 = new DoubleSolenoid(Constants.portSolenoid3A, Constants.portSolenoid3B);
+  public static DoubleSolenoid solenoid1 = new DoubleSolenoid(Constants.AccumulatorConstants.solenoid1APort,
+      Constants.AccumulatorConstants.solenoid1BPort);
+  public static DoubleSolenoid solenoid2 = new DoubleSolenoid(Constants.AccumulatorConstants.solenoid2APort,
+      Constants.AccumulatorConstants.solenoid2BPort);
 
   public static boolean sensor;
-  public final DigitalInput LineBreakSensor = new DigitalInput(Constants.LineBreakSensorID);
+  public final DigitalInput LineBreakSensor = new DigitalInput(Constants.AccumulatorConstants.lineBreakSensorPort);
 
   public enum State {
     EXTENDED, RETRACTED
