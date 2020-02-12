@@ -7,6 +7,9 @@
 
 package frc.robot;
 
+import frc.robot.RobotContainer;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
  * numerical or boolean constants. This class should not be used for any other
@@ -20,6 +23,20 @@ package frc.robot;
 public final class Constants {
     public final static int joystickPort = 0;
     public final static int xboxPort = 1;
+
+    public final static class AccumulatorConstants {
+
+        public final static int flywheelMotorPort = 1;
+        public final static int ballAlignmentMotorPort = 2;
+        public final static int hopUpMotorPort = 3;
+
+        public final static int lineBreakSensorPort = 4;
+
+        public final static int solenoid1APort = 6;
+        public final static int solenoid1BPort = 7; // All random numbers FYI
+        public final static int solenoid2APort = 8;
+        public final static int solenoid2BPort = 9;
+    }
 
     public final static class HoodConstants {
         public static enum TurnState {
