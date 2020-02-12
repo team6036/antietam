@@ -24,6 +24,7 @@ public class AccumulatorCommand extends CommandBase {
   @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
   private final AccumulatorSubsystem m_accumulator;
   private final DoubleSupplier m_xbox;
+  private final Consumer m_addBall;
 
   private static boolean lineBreakSensor = false;
   private static int ballsEntered = 0;
@@ -33,10 +34,10 @@ public class AccumulatorCommand extends CommandBase {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public AccumulatorCommand(AccumulatorSubsystem accumulator, DoubleSupplier supplier) {
+  public AccumulatorCommand(AccumulatorSubsystem accumulator, DoubleSupplier supplier, Consumer addBall) {
     m_accumulator = accumulator;
     m_xbox = supplier;
-
+    m_addBall = addBall;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(accumulator);
   }
@@ -66,6 +67,7 @@ public class AccumulatorCommand extends CommandBase {
         // previsouly the sensor was impeded, it is no longer being impeded, meaning a
         // ball has gone in
         ballsEntered++;
+        addBall.accept();
       }
 
     } else {

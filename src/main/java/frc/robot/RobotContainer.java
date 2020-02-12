@@ -63,8 +63,6 @@ public class RobotContainer {
   private final TurretSubsystem m_turretSubsystem = new TurretSubsystem();
   private final HoodSubsystem m_hoodSubsystem = new HoodSubsystem();
 
-  private final AccumulatorCommand m_accumulatorCommand = new AccumulatorCommand(m_accumulatorSubsystem,
-      () -> Xbox.getTriggerAxis(Hand.kLeft));
   private final DrivetrainCommand m_drivetrainCommand = new DrivetrainCommand(m_drivetrainSubsystem,
       () -> m_joystick.getY(), () -> m_joystick.getX());
   private final ShooterCommand m_shooterCommand = new ShooterCommand(m_shooterSubsystem,
@@ -72,6 +70,8 @@ public class RobotContainer {
   private final TurretCommand m_turretCommand = new TurretCommand(m_turretSubsystem,
       () -> m_controller.getY(Hand.kLeft));
   private final HoodCommand m_hoodCommand = new HoodCommand(m_hoodSubsystem, () -> m_controller.getY(Hand.kRight));
+  private final AccumulatorCommand m_accumulatorCommand = new AccumulatorCommand(m_accumulatorSubsystem,
+      () -> Xbox.getTriggerAxis(Hand.kLeft), () -> m_shooterCommand.addBall());
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
