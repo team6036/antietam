@@ -13,6 +13,11 @@ import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 
+// the below imports are for the logging command
+import java.io.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -25,17 +30,12 @@ public class RobotContainer {
 
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
 
-  private final LoggerSubsystem m_loggerSubsystem = new LoggerSubsystem();
-
-  private final LogToRio m_logToRio = new LogToRio(m_loggerSubsystem);
-
 
 
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    CommandScheduler.getInstance().setDefaultCommand(m_loggerSubsystem, m_logToRio);
     // Configure the button bindings
     configureButtonBindings();
   }
@@ -58,5 +58,33 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
     return m_autoCommand;
+  }
+
+
+  /**
+   * The 2 methods below are used to log messages to a text file on the roborio's memory
+   * 
+   * Example Use: logShit("log", "this is an example message")
+   * Example Output: "2020/02/13 14:58:14 - example message"
+   * 
+   * default value of filename should be log unless specifically looking at one value in which case you can use "accelerationLog" or something like that
+   */
+
+   // writes to log
+   public static void logShit(String filename, String message) {
+    try {
+      File dir = new File("/home/admin/logs/");
+      FileWriter fw = new FileWriter(new File(dir, filename + ".txt"), true);
+      fw.write(currentTime() + message + "\n");
+      fw.close();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+   }
+
+   // returns the current date and time as a string in the format "yyyy/MM/dd HH:mm:ss - "
+   public static String currentTime() {
+    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss - ");
+    return dtf.format(LocalDateTime.now());
   }
 }

@@ -7,7 +7,10 @@
 
 package frc.robot.commands;
 
-import frc.robot.subsystems.LoggerSubsystem;
+import java.io.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /**
@@ -15,17 +18,13 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
  */
 public class LogToRio extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private final LoggerSubsystem m_subsystem;
 
   /**
    * Creates a new LogToRio.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public LogToRio(LoggerSubsystem subsystem) {
-    m_subsystem = subsystem;
-    // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(subsystem);
+  public LogToRio() {
   }
 
   // Called when the command is initially scheduled.
@@ -40,7 +39,7 @@ public class LogToRio extends CommandBase {
       FileWriter fw = new FileWriter(new File(dir, filename + ".txt"), true);
       fw.write(currentTime() + message + "\n");
       fw.close();
-    } catch (IOException e) {
+    } catch (Exception e) {
       e.printStackTrace();
     }
   }
