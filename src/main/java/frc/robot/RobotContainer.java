@@ -87,31 +87,4 @@ public class RobotContainer {
     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss - ");
     return dtf.format(LocalDateTime.now());
   }
-
-  /**
-   * The 2 methods below are used to log messages to a text file on the roborio's memory
-   * 
-   * Example Use: logShit("log", "this is an example message")
-   * Example Output: "2020/02/13 14:58:14 - example message"
-   * 
-   * default value of filename should be log unless specifically looking at one value in which case you can use "accelerationLog" or something like that
-   */
-
-   // writes to log
-   public static void logShit(String filename, String message) {
-    try {
-      File dir = new File("/home/admin/logs/");
-      FileWriter fw = new FileWriter(new File(dir, filename + ".txt"), true);
-      fw.write(currentTime() + message + "\n");
-      fw.close();
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-   }
-
-   // returns the current date and time as a string in the format "yyyy/MM/dd HH:mm:ss - "
-   public static String currentTime() {
-    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss - ");
-    return dtf.format(LocalDateTime.now());
-  }
 }
