@@ -12,9 +12,6 @@ import frc.robot.subsystems.ClimberSubsystem;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants.DrivetrainConstants;
-// import frc.robot.Constants.DrivetrainConstants.ControlState;
-import frc.robot.subsystems.DrivetrainSubsystem;
 
 /**
  * An example command that uses an example subsystem.
@@ -22,46 +19,23 @@ import frc.robot.subsystems.DrivetrainSubsystem;
 public class ClimberCommand extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final ClimberSubsystem m_climber;
-  private final DrivetrainSubsystem m_drivetrain;
   private static boolean[] climberExtended = {false,false};
-  private DoubleSupplier getX, getY;
-  private static double leftSet, rightSet;
-  // private ControlState controlState = ControlState.LIMELIGHT;
-  // private double Kp = DrivetrainConstants.kp;
-  // private double targetDist = DrivetrainConstants.targetDist;
   
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public ClimberCommand(ClimberSubsystem climberSubsystem, DrivetrainSubsystem drivetrainSubsystem, DoubleSupplier getY, DoubleSupplier getX) {
+  public ClimberCommand(ClimberSubsystem climberSubsystem) {
     m_climber = climberSubsystem;
-    m_drivetrain = drivetrainSubsystem;
-    this.getY = getY;
-    this.getX = getX;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(climberSubsystem);
-    addRequirements(drivetrainSubsystem);
   }
 
-  public static void toggleArmPiston(double left, double right) {
+  public static void toggleArmPiston() {
     climberExtended[1] = climberExtended[0];
     climberExtended[0] = !climberExtended[0];
   }
-
-  public static void drive(double left, double right) {
-    leftSet = left;
-    rightSet = right;
-  }
-
-  // public void changeState(ControlState controlState) {
-  //   this.controlState = controlState;
-  // }
-
-  // public ControlState getState() {
-  //   return controlState;
-  // }
 
   // Called when the command is initially scheduled.
   @Override
@@ -75,8 +49,6 @@ public class ClimberCommand extends CommandBase {
       m_climber.toggleArmPiston(climberExtended[0]);
       climberExtended[1] = climberExtended[0];
     }
-    m_drivetrain.drive(getY.getAsDouble(), getX.getAsDouble());
-    return;
   }
 
   // Called once the command ends or is interrupted.

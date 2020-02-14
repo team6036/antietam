@@ -7,11 +7,18 @@
 
 package frc.robot;
 
+import frc.robot.Constants;
+
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.commands.ExampleCommand;
-import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.commands.ClimberCommand;
+import frc.robot.subsystems.ClimberSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.button.Button;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -21,16 +28,18 @@ import edu.wpi.first.wpilibj2.command.Command;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+  private final Joystick m_joystick = new Joystick(Constants.joystickPort);
+  private final XboxController m_controller = new XboxController(Constants.xboxPort);
+  private final JoystickButton m_yButton = new JoystickButton(m_controller, 4);
 
-  private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
-
-
+  private final ClimberSubsystem m_climberSubsystem = new ClimberSubsystem();
+  private final ClimberCommand m_climberCommand = new ClimberCommand(m_climberSubsystem);
 
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+    CommandScheduler.getInstance().setDefaultCommand(m_climberSubsystem, m_climberCommand);
     // Configure the button bindings
     configureButtonBindings();
   }
@@ -42,16 +51,6 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-  }
-
-
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
-  public Command getAutonomousCommand() {
-    // An ExampleCommand will run in autonomous
-    return m_autoCommand;
+    m_yButton.whenPressed(new InstantCommand(() -> ClimberCommand.toggleArmPiston()));
   }
 }
