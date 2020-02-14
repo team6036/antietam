@@ -20,7 +20,9 @@ package frc.robot;
 public final class Constants {
     public final static int joystickPort = 0;
     public final static int xboxPort = 1;
-
+    public final static class LinebreakConstants{
+        public final static int inputPort = 0;
+    }
     public final static class AccumulatorConstants {
 
         public final static int flywheelMotorPort = 1;
@@ -62,10 +64,10 @@ public final class Constants {
     public final static class DrivetrainConstants {
         public static final double kp = 0.00001;
         public static final double targetDist = 50;
-        public static final int frontleftmotorPORT = 1;
-        public static final int backleftmotorPORT = 2;
-        public static final int frontrightmotorPORT = 14;
-        public static final int backrightmotorPORT = 15;
+        public static final int frontleftmotorPORT = 15;
+        public static final int backleftmotorPORT = 14;
+        public static final int frontrightmotorPORT = 2;
+        public static final int backrightmotorPORT = 1;
 
         public static enum ControlState {
             MANUAL, LIMELIGHT, CLIMBER;
