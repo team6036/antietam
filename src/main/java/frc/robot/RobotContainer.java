@@ -49,13 +49,14 @@ public class RobotContainer {
    */
 
   private final Joystick m_joystick = new Joystick(Constants.joystickPort);
-  private final XboxController m_controller = new XboxController(Constants.xboxPort);
-
+  // private final XboxController m_controller = new XboxController(Constants.xboxPort);
+/*
   private final JoystickButton m_xButton = new JoystickButton(m_controller, 3);
   private final JoystickButton m_aButton = new JoystickButton(m_controller, 1);
-  private final JoystickButton m_threePointButton = new JoystickButton(m_joystick, 11);
   private final JoystickButton LeftBumper = new JoystickButton(m_controller, 5);
   private final JoystickButton RightBumper = new JoystickButton(m_controller, 6);
+  */
+  private final JoystickButton m_threePointButton = new JoystickButton(m_joystick, 11);
 
   private final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
   /*
@@ -106,8 +107,8 @@ public class RobotContainer {
     LeftBumper.whenPressed(new InstantCommand(() -> m_accumulatorSubsystem.extend()));
     RightBumper.whenPressed(new InstantCommand(() -> m_accumulatorSubsystem.retract()));
     */
-    m_xButton.whenPressed(new InstantCommand(() -> manualTarget()));
-    m_aButton.whenPressed(new InstantCommand(() -> HoodCommand.zero()));
+    //m_xButton.whenPressed(new InstantCommand(() -> manualTarget()));
+    //m_aButton.whenPressed(new InstantCommand(() -> HoodCommand.zero()));
     m_threePointButton.whenPressed(new InstantCommand(() -> threePoint()));
 
   }

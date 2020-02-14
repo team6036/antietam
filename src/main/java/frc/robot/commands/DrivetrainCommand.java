@@ -28,7 +28,7 @@ public class DrivetrainCommand extends CommandBase {
   private PIDController drivePID;
   private PIDController turnPID;
 
-  private ControlState controlState = ControlState.LIMELIGHT;
+  private ControlState controlState = ControlState.MANUAL;
   private double Kp = DrivetrainConstants.kp;
   private double targetDist = DrivetrainConstants.targetDist;
 
@@ -72,7 +72,7 @@ public class DrivetrainCommand extends CommandBase {
   public void execute() {
     switch (controlState) {
     case MANUAL: {
-      m_drivetrain.drive(getY.getAsDouble(), getX.getAsDouble());
+      m_drivetrain.drive(getX.getAsDouble(), getY.getAsDouble());
       return;
     }
     case LIMELIGHT: {
