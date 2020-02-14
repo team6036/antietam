@@ -16,4 +16,13 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+    public final static class ClimberConstants {
+        public final static int climberArmForwardPort = #;
+        public final static int climberArmReversePort = #;
+        public final static int armExtendButtonPort = #;
+        public final static int armRetractButtonPort = #;
+        public final static int winchInPort = #;
+        public final static int winchOut = #;
+    }    
 }
+
