@@ -8,9 +8,14 @@
 package frc.robot.commands;
 
 import java.util.function.DoubleSupplier;
+
+import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.Constants.DrivetrainConstants.ControlState;
 import frc.robot.subsystems.DrivetrainSubsystem;
+import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Limelight;
 
 /**
  * An example command that uses an example subsystem.
@@ -20,8 +25,12 @@ public class DrivetrainCommand extends CommandBase {
   private DoubleSupplier getX, getY;
   private final DrivetrainSubsystem m_drivetrain;
   private static double leftSet, rightSet;
+  private PIDController drivePID;
+  private PIDController turnPID;
 
-  private ControlState controlState = ControlState.MANUAL;
+  private ControlState controlState = ControlState.LIMELIGHT;
+  private double Kp = DrivetrainConstants.kp;
+  private double targetDist = DrivetrainConstants.targetDist;
 
   /**
    * Creates a new ExampleCommand.
@@ -29,6 +38,10 @@ public class DrivetrainCommand extends CommandBase {
    * The subsystem used by this command.
    */
   public DrivetrainCommand(DrivetrainSubsystem drivetrain, DoubleSupplier getY, DoubleSupplier getX) {
+    drivePID = new PIDController(Kp, 0, 0);
+    drivePID.setSetpoint(targetDist);
+    turnPID = new PIDController(Kp, 0, 0);
+    turnPID.setSetpoint(0);
     this.getY = getY;
     this.getX = getX;
     m_drivetrain = drivetrain;
@@ -62,7 +75,16 @@ public class DrivetrainCommand extends CommandBase {
       m_drivetrain.drive(getY.getAsDouble(), getX.getAsDouble());
       return;
     }
-    default: {
+    case LIMELIGHT: {
+      SmartDashboard.putNumber("Distance", Limelight.getDistance());
+      /*
+      double turn = turnPID.calculate(Limelight.tx());
+      double drive = turnPID.calculate(Limelight.getDistance());
+      m_drivetrain.lowLevelDrive(drive+turn,drive-turn);
+      */
+      return;
+    }
+    case CLIMBER: {
       m_drivetrain.lowLevelDrive(leftSet, rightSet);
       return;
     }

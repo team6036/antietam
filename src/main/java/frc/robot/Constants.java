@@ -7,9 +7,6 @@
 
 package frc.robot;
 
-import frc.robot.RobotContainer;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
  * numerical or boolean constants. This class should not be used for any other
@@ -64,6 +61,7 @@ public final class Constants {
 
     public final static class DrivetrainConstants {
         public static final double kp = 0.00001;
+        public static final double targetDist = 50;
         public static final int frontleftmotorPORT = 1;
         public static final int backleftmotorPORT = 2;
         public static final int frontrightmotorPORT = 14;
@@ -95,9 +93,14 @@ public final class Constants {
     }
 
     public final static class LimelightConstants {
+        public static enum DistanceMode {
+            TRIG, CAMTRAN;
+        }
+
         public final static double verticalKP = 0.00001;
         public final static double horizontalKP = 0.00001;
         public final static double targetDistance = 30;
+        public final static double deltaY = 0;
 
         public final static boolean debug = true;
     }
