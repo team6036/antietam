@@ -12,8 +12,8 @@ import frc.robot.Constants;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.commands.ClimberCommand;
-import frc.robot.subsystems.ClimberSubsystem;
+import frc.robot.commands.DrivetrainCommand;
+import frc.robot.subsystems.DrivetrainSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -30,16 +30,19 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final Joystick m_joystick = new Joystick(Constants.joystickPort);
   private final XboxController m_controller = new XboxController(Constants.xboxPort);
-  private final JoystickButton m_yButton = new JoystickButton(m_controller, 4);
+  // button for the first climber sequence (engaging winch)
+  private final JoystickButton m_buttonThree = new JoystickButton(m_controller, 3);
+  // button for the second climber sequence (raise / lower arm)
+  private final JoystickButton m_buttonFour = new JoystickButton(m_controller, 4);
 
-  private final ClimberSubsystem m_climberSubsystem = new ClimberSubsystem();
-  private final ClimberCommand m_climberCommand = new ClimberCommand(m_climberSubsystem);
+  private final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
+  private final DrivetrainCommand m_drivetrainCommand = new DrivetrainCommand(m_drivetrainSubsystem);
 
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    CommandScheduler.getInstance().setDefaultCommand(m_climberSubsystem, m_climberCommand);
+    CommandScheduler.getInstance().setDefaultCommand(m_drivetrainSubsystem, m_drivetrainCommand);
     // Configure the button bindings
     configureButtonBindings();
   }
@@ -51,6 +54,7 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    m_yButton.whenPressed(new InstantCommand(() -> ClimberCommand.toggleArmPiston()));
+    m_buttonThree.whenPressed(new InstantCommand(() -> DrivetrainCommand.toggleWinchPiston()));
+    m_buttonFour.whenPressed(new InstantCommand(() -> DrivetrainCommand.toggleArmPiston()));
   }
 }

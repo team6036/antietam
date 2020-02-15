@@ -7,34 +7,38 @@
 
 package frc.robot.commands;
 
-import frc.robot.subsystems.ClimberSubsystem;
-
-import java.util.function.DoubleSupplier;
+import frc.robot.subsystems.DrivetrainSubsystem;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /**
  * An example command that uses an example subsystem.
  */
-public class ClimberCommand extends CommandBase {
+public class DrivetrainCommand extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private final ClimberSubsystem m_climber;
-  private static boolean[] climberExtended = {false,false};
+  private final DrivetrainSubsystem m_drivetrain;
+  private static boolean[] climberArmExtended = {false,false};
+  private static boolean[] winchEngaged = {false,false};
   
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public ClimberCommand(ClimberSubsystem climberSubsystem) {
-    m_climber = climberSubsystem;
+  public DrivetrainCommand(DrivetrainSubsystem drivetrain) {
+    m_drivetrain = drivetrain;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(climberSubsystem);
+    addRequirements(drivetrain);
   }
 
   public static void toggleArmPiston() {
-    climberExtended[1] = climberExtended[0];
-    climberExtended[0] = !climberExtended[0];
+    climberArmExtended[1] = climberArmExtended[0];
+    climberArmExtended[0] = !climberArmExtended[0];
+  }
+
+  public static void toggleWinchPiston() {
+    winchEngaged[1] = winchEngaged[0];
+    winchEngaged[0] = !winchEngaged[0];
   }
 
   // Called when the command is initially scheduled.
@@ -45,9 +49,13 @@ public class ClimberCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(climberExtended[0] != climberExtended[1]){
-      m_climber.toggleArmPiston(climberExtended[0]);
-      climberExtended[1] = climberExtended[0];
+    if(climberArmExtended[0] != climberArmExtended[1]){
+      m_drivetrain.toggleClimberArmPiston(climberArmExtended[0]);
+      climberArmExtended[1] = climberArmExtended[0];
+    }
+    if(winchEngaged[0] != winchEngaged[1]){
+      m_drivetrain.toggleClimberWinchPiston(winchEngaged[0]);
+      winchEngaged[1] = winchEngaged[0];
     }
   }
 
