@@ -49,6 +49,7 @@ public class RobotContainer {
    */
 
   private final Joystick m_joystick = new Joystick(Constants.joystickPort);
+  private final LineBreak m_lineBreak = new LineBreak();
   // private final XboxController m_controller = new XboxController(Constants.xboxPort);
 /*
   private final JoystickButton m_xButton = new JoystickButton(m_controller, 3);

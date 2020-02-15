@@ -21,7 +21,7 @@ public final class Constants {
     public final static int joystickPort = 0;
     public final static int xboxPort = 1;
     public final static class LinebreakConstants{
-        public final static int inputPort = 0;
+        public final static int inputPort = 9;
     }
     public final static class AccumulatorConstants {
 
