@@ -7,9 +7,6 @@
 
 package frc.robot;
 
-import frc.robot.RobotContainer;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
  * numerical or boolean constants. This class should not be used for any other
@@ -73,10 +70,6 @@ public final class Constants {
             MANUAL, LIMELIGHT, CLIMBER;
         }
 
-        public final static boolean debug = false;
-    }
-
-    public final static class AccumulatorConstants {
         public final static boolean debug = false;
     }
 

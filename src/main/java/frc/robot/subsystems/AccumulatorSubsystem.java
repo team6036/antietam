@@ -5,7 +5,6 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.RobotContainer;
 
 public class AccumulatorSubsystem extends SubsystemBase {
   public VictorSP flywheelMotor = new VictorSP(Constants.AccumulatorConstants.flywheelMotorPort);

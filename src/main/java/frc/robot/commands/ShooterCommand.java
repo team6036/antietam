@@ -36,7 +36,7 @@ public class ShooterCommand extends CommandBase {
     addRequirements(shooterSubsystem); // @TODO this for all commands and respective key subsystems
   }
 
-  public void addBall() {
+  public void addBall(Object x) {
     ballStates.add(BallStates.CONTAINED);
   }
 

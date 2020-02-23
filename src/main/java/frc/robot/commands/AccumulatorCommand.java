@@ -7,14 +7,9 @@
 
 package frc.robot.commands;
 
-import frc.robot.Constants;
-import frc.robot.RobotContainer;
 import frc.robot.subsystems.AccumulatorSubsystem;
-
+import java.util.function.Consumer;
 import java.util.function.DoubleSupplier;
-
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /**
@@ -24,7 +19,7 @@ public class AccumulatorCommand extends CommandBase {
   @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
   private final AccumulatorSubsystem m_accumulator;
   private final DoubleSupplier m_xbox;
-  private final Consumer m_addBall;
+  private final Consumer<Object> m_addBall;
 
   private static boolean lineBreakSensor = false;
   private static int ballsEntered = 0;
@@ -34,7 +29,7 @@ public class AccumulatorCommand extends CommandBase {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public AccumulatorCommand(AccumulatorSubsystem accumulator, DoubleSupplier supplier, Consumer addBall) {
+  public AccumulatorCommand(AccumulatorSubsystem accumulator, DoubleSupplier supplier, Consumer<Object> addBall) {
     m_accumulator = accumulator;
     m_xbox = supplier;
     m_addBall = addBall;
@@ -67,7 +62,7 @@ public class AccumulatorCommand extends CommandBase {
         // previsouly the sensor was impeded, it is no longer being impeded, meaning a
         // ball has gone in
         ballsEntered++;
-        addBall.accept();
+        m_addBall.accept(new Object());
       }
 
     } else {
