@@ -9,6 +9,8 @@ package frc.robot;
 
 import frc.robot.Constants;
 
+import java.util.function.Consumer;
+
 import edu.wpi.first.wpilibj.DigitalInput;
 
 import edu.wpi.first.wpilibj.GenericHID;
@@ -70,8 +72,13 @@ public class RobotContainer {
   private final TurretCommand m_turretCommand = new TurretCommand(m_turretSubsystem,
       () -> m_controller.getY(Hand.kLeft));
   private final HoodCommand m_hoodCommand = new HoodCommand(m_hoodSubsystem, () -> m_controller.getY(Hand.kRight));
-  private final AccumulatorCommand m_accumulatorCommand = new AccumulatorCommand(m_accumulatorSubsystem,
-      () -> Xbox.getTriggerAxis(Hand.kLeft), () -> m_shooterCommand.addBall());
+  
+  private final Consumer<Boolean> addBall = (v) ->{
+    m_shooterCommand.addBall();
+  };
+
+  private final AccumulatorCommand m_accumulatorCommand = new AccumulatorCommand(m_accumulatorSubsystem, () -> m_controller.getTriggerAxis(Hand.kLeft), addBall);
+   
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.

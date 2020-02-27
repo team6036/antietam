@@ -36,6 +36,8 @@ public final class Constants {
         public final static int solenoid1BPort = 7; // All random numbers FYI
         public final static int solenoid2APort = 8;
         public final static int solenoid2BPort = 9;
+
+        public final static boolean debug = false;
     }
 
     public final static class HoodConstants {
@@ -73,10 +75,6 @@ public final class Constants {
             MANUAL, LIMELIGHT, CLIMBER;
         }
 
-        public final static boolean debug = false;
-    }
-
-    public final static class AccumulatorConstants {
         public final static boolean debug = false;
     }
 
