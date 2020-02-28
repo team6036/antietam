@@ -43,6 +43,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
         backRightMotor.follow(frontRightMotor);
 
         drivetrain = new DifferentialDrive(frontLeftMotor, frontRightMotor);
+
+        //add polarity here
     }
 
     public void drive(double forward, double turn) {
@@ -50,7 +52,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     }
 
     public void lowLevelDrive(double left, double right) {
-        frontLeftMotor.set(-left);
+        frontLeftMotor.set(left);
         frontRightMotor.set(right);
     }
 
