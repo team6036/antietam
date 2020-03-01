@@ -7,13 +7,17 @@
 
 package frc.robot.commands;
 
+import frc.robot.Constants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.ShooterSubsystem;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.function.DoubleSupplier;
 import frc.robot.Constants.ShooterConstants.BallStates;
+import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class ShooterCommand extends CommandBase {
@@ -24,6 +28,7 @@ public class ShooterCommand extends CommandBase {
 
   private final ShooterSubsystem m_shooterSubsystem;
   private DoubleSupplier m_rTrigger;
+  
 
 
   private ArrayList<BallStates> ballStates = new ArrayList<>(
@@ -40,16 +45,45 @@ public class ShooterCommand extends CommandBase {
     ballStates.add(BallStates.CONTAINED);
   }
 
+  XboxController controller = new XboxController(Constants.xboxPort);
+
   @Override
   public void execute() {
     if(debug){
       m_shooterSubsystem.debug();
     }
+    // if ball is contained or waiting, makes sure it doesnt come out
     containBall();
+    // if ball is ready, shoot, if it has left, remove it
     shootBall();
+    // if ball is contained, ramp up, if contained, stop
     setVelocity();
+    // if past a threshold, set all to waiting, if medium, only one, if low, do nothing
     handleJoystick();
+    // if no balls, stop
     reset();
+
+    /**
+    if(controller.getBButton()){
+      m_shooterSubsystem.setHopupVelocity(-0.5);
+    }
+    if(controller.getXButton()){
+      m_shooterSubsystem.setHopupVelocity(0.5);
+    }else{
+      m_shooterSubsystem.setHopupVelocity(0.0);
+    }
+
+
+
+    if(m_rTrigger.getAsDouble() < 0.05){
+      m_shooterSubsystem.setShooterVelocity(0.0);
+    }else{
+      m_shooterSubsystem.setShooterVelocity(m_rTrigger.getAsDouble());
+    //  m_shooterSubsystem.setHopupVelocity(-0.5);
+     SmartDashboard.putNumber("Shooter velocity", m_shooterSubsystem.getShooterVelocity());
+    
+    }
+    */
   }
 
   /**
@@ -83,7 +117,7 @@ public class ShooterCommand extends CommandBase {
   private void shootBall() {
     switch (ballStates.get(0)) {
     case READY: {
-      m_shooterSubsystem.setHopupVelocity(0.1);
+      m_shooterSubsystem.setHopupVelocity(0.1); //TODO change this to final
       if (m_shooterSubsystem.getLineBreak()) {
         ballStates.set(0, BallStates.LEAVING);
       }
@@ -109,7 +143,7 @@ public class ShooterCommand extends CommandBase {
   private void setVelocity() {
     switch (ballStates.get(0)) {
     case WAITING: {
-      pidController.setSetpoint(0.1); // TODO this needs to be changed
+      pidController.setSetpoint(0.1); // TODO this needs to be changed to target speed
       if (pidController.getSetpoint() == m_shooterSubsystem.getShooterVelocity()) {
         ballStates.set(0, BallStates.READY);
       } else {

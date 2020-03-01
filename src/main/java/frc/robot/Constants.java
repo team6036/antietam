@@ -22,20 +22,22 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
  */
 public final class Constants {
     public final static int joystickPort = 0;
-    public final static int xboxPort = 1;
+    public final static int xboxPort = 2;
 
     public final static class AccumulatorConstants {
 
-        public final static int flywheelMotorPort = 1;
-        public final static int ballAlignmentMotorPort = 2;
-        public final static int hopUpMotorPort = 3;
+        public final static int rollerMotorPort = 0;
+        public final static int serializerMotorPort = 1;
+        //public final static int ballTubeMotorPort = 2;
 
-        public final static int lineBreakSensorPort = 4;
+        public final static int solenoid1APort = 0;
+        public final static int solenoid1BPort = 1;
 
-        public final static int solenoid1APort = 6;
-        public final static int solenoid1BPort = 7; // All random numbers FYI
-        public final static int solenoid2APort = 8;
-        public final static int solenoid2BPort = 9;
+        public final static double rollerMotorPower = 0.75; 
+        public final static double serializerMotorPower = 0.1; 
+        //public final static double ballTubeMotorPower = -0.99; 
+        
+        
 
         public final static boolean debug = false;
     }
@@ -59,8 +61,8 @@ public final class Constants {
             SEEKING, PIDCONTROL, MANUAL;
         }
 
-        public static final int motorPort = 0;
-        public static final int encoderPorts = 0;
+        public static final int motorPort = 5;
+        public static final int encoderPorts = 6;
         public static final double kp = 0.00001;
     }
 
@@ -68,8 +70,8 @@ public final class Constants {
         public static final double kp = 0.00001;
         public static final int frontleftmotorPORT = 1;
         public static final int backleftmotorPORT = 2;
-        public static final int frontrightmotorPORT = 14;
-        public static final int backrightmotorPORT = 15;
+        public static final int frontrightmotorPORT = 3;
+        public static final int backrightmotorPORT = 4;
 
         public static enum ControlState {
             MANUAL, LIMELIGHT, CLIMBER;
@@ -87,9 +89,9 @@ public final class Constants {
             CONTAINED, WAITING, READY, LEAVING;
         }
 
-        public static final int firstShooterPort = 0;
-        public static final int secondShooterPort = 0;
-        public static final int hopupPort = 0;
+        public static final int firstShooterPort = 6;
+        public static final int secondShooterPort = 7;
+        public static final int hopupPort = 6;
         public static final int lineBreakPort = 0;
         public static final double kp = 0.00001;
 

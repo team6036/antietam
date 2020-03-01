@@ -63,19 +63,21 @@ public class RobotContainer {
   private final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
   private final ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem();
   private final TurretSubsystem m_turretSubsystem = new TurretSubsystem();
-  private final HoodSubsystem m_hoodSubsystem = new HoodSubsystem();
+  ///private final HoodSubsystem m_hoodSubsystem = new HoodSubsystem();
 
   private final DrivetrainCommand m_drivetrainCommand = new DrivetrainCommand(m_drivetrainSubsystem,
       () -> m_joystick.getY(), () -> m_joystick.getX());
   private final ShooterCommand m_shooterCommand = new ShooterCommand(m_shooterSubsystem,
       () -> m_controller.getTriggerAxis(Hand.kRight));
   private final TurretCommand m_turretCommand = new TurretCommand(m_turretSubsystem,
-      () -> m_controller.getY(Hand.kLeft));
-  private final HoodCommand m_hoodCommand = new HoodCommand(m_hoodSubsystem, () -> m_controller.getY(Hand.kRight));
+      () -> m_controller.getX(Hand.kLeft));
+ // private final HoodCommand m_hoodCommand = new HoodCommand(m_hoodSubsystem, () -> m_controller.getY(Hand.kRight));
   
   private final Consumer<Boolean> addBall = (v) ->{
-    m_shooterCommand.addBall();
+    //m_shooterCommand.addBall();
+    
   };
+
 
   private final AccumulatorCommand m_accumulatorCommand = new AccumulatorCommand(m_accumulatorSubsystem, () -> m_controller.getTriggerAxis(Hand.kLeft), addBall);
    
@@ -91,7 +93,7 @@ public class RobotContainer {
     CommandScheduler.getInstance().setDefaultCommand(m_drivetrainSubsystem, m_drivetrainCommand);
     CommandScheduler.getInstance().setDefaultCommand(m_shooterSubsystem, m_shooterCommand);
     CommandScheduler.getInstance().setDefaultCommand(m_turretSubsystem, m_turretCommand);
-    CommandScheduler.getInstance().setDefaultCommand(m_hoodSubsystem, m_hoodCommand);
+    //CommandScheduler.getInstance().setDefaultCommand(m_hoodSubsystem, m_hoodCommand);
 
     // Configure the button bindings
     configureButtonBindings();
@@ -105,11 +107,11 @@ public class RobotContainer {
    * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    LeftBumper.whenPressed(new InstantCommand(() -> m_accumulatorSubsystem.extend()));
-    RightBumper.whenPressed(new InstantCommand(() -> m_accumulatorSubsystem.retract()));
-    m_xButton.whenPressed(new InstantCommand(() -> manualTarget()));
-    m_aButton.whenPressed(new InstantCommand(() -> HoodCommand.zero()));
-    m_threePointButton.whenPressed(new InstantCommand(() -> threePoint()));
+    //LeftBumper.whenPressed(new InstantCommand(() -> m_accumulatorSubsystem.extend()));
+    //RightBumper.whenPressed(new InstantCommand(() -> m_accumulatorSubsystem.retract()));
+    //m_xButton.whenPressed(new InstantCommand(() -> manualTarget()));
+    //m_aButton.whenPressed(new InstantCommand(() -> HoodCommand.zero()));
+    //m_threePointButton.whenPressed(new InstantCommand(() -> threePoint()));
 
   }
 

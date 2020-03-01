@@ -57,13 +57,14 @@ public class DrivetrainCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    //m_drivetrain.frontRightMotor.set(0.1);
     switch (controlState) {
     case MANUAL: {
       m_drivetrain.drive(getY.getAsDouble(), getX.getAsDouble());
       return;
     }
     default: {
-      m_drivetrain.lowLevelDrive(leftSet, rightSet);
+     // m_drivetrain.lowLevelDrive(leftSet, rightSet);
       return;
     }
     }

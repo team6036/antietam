@@ -57,9 +57,12 @@ public class TurretSubsystem extends SubsystemBase {
      */
     public void turn(double amount) {
         // prevent overrotation
-        if (amount >= 0.1) {
-            power = amount;
-            motor.set(power);
+        if (amount >= 0.15) {
+            power = amount*0.1;
+            
+        }else{
+            power = 0;
         }
+        motor.set(power);
     }
 }

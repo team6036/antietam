@@ -22,10 +22,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
     private static final int frontrightmotorPORT = DrivetrainConstants.frontrightmotorPORT;
     private static final int backrightmotorPORT = DrivetrainConstants.backrightmotorPORT;
 
-    private CANSparkMax frontLeftMotor;
-    private CANSparkMax backLeftMotor;
-    private CANSparkMax frontRightMotor;
-    private CANSparkMax backRightMotor;
+    public CANSparkMax frontLeftMotor;
+    public CANSparkMax backLeftMotor;
+    public CANSparkMax frontRightMotor;
+    public CANSparkMax backRightMotor;
     private DifferentialDrive drivetrain;
 
     // private final DifferentialDrive Drivetrain;

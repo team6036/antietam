@@ -28,6 +28,7 @@ public class TurretCommand extends CommandBase {
         pidController.setSetpoint(0);
         this.m_turretSubsystem = m_turretSubsystem;
         this.jStick = jStick;
+        addRequirements(m_turretSubsystem);
     }
 
     /**
@@ -58,6 +59,8 @@ public class TurretCommand extends CommandBase {
      */
     @Override
     public void execute() {
+
+        //m_turretSubsystem.turn(0.1);
         switch (turretMode) {
         case TWOPOINT: {
             if (Limelight.ta() != 0) {
@@ -70,7 +73,9 @@ public class TurretCommand extends CommandBase {
             zero(m_turretSubsystem.getDisplacement());
         }
         case MANUAL: {
+
             m_turretSubsystem.turn(jStick.getAsDouble());
+            //TODO move threshold to the command out of subsystem
         }
         }
     }
