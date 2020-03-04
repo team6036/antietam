@@ -9,14 +9,21 @@ import frc.robot.subsystems.HoodSubsystem;
 import frc.robot.Limelight;
 
 public class HoodCommand extends CommandBase {
-
+    //Constants
     private static TurnState turnState = TurnState.MANUAL;
     private double kp = HoodConstants.kp;
 
+    //Hardware
     private HoodSubsystem m_hoodSubsystem;
     private DoubleSupplier jStick;
     private PIDController controller;
 
+    /**
+     * Basic constructor 
+     * 
+     * @param m_hoodSubsystem
+     * @param jStick for manual hood control
+     */
     public HoodCommand(HoodSubsystem m_hoodSubsystem, DoubleSupplier jStick) {
         this.m_hoodSubsystem = m_hoodSubsystem;
         this.jStick = jStick;
@@ -24,44 +31,53 @@ public class HoodCommand extends CommandBase {
         addRequirements(m_hoodSubsystem);
     }
 
-    // inside the HoodCommand
     /**
-     * Turns or autoadjusts based on distance
+     * MANUAL: turns manually according to jstick AUTOTARGET: turns according to
+     * distance ZEROING: Puts hood all the way down
      */
     @Override
     public void execute() {
         switch (turnState) {
-        case AUTOTARGET: {
-            autoAdjust(distToAngle(Limelight.getDistance()));
-        }
-        case MANUAL: {
-           // m_hoodSubsystem.turn(jStick.getAsDouble());
-        }
-        case ZEROING: {
-            autoAdjust(0);
-        }
-        }
-    }
-    public static void zero(){
-        switch(turnState){
-            case ZEROING:{
-                turnState=TurnState.AUTOTARGET;
+            case AUTOTARGET: {
+                autoAdjust(distToAngle(Limelight.getDistance()));
             }
-            default:{
-                turnState=TurnState.ZEROING;
+            case MANUAL: {
+                m_hoodSubsystem.turn(jStick.getAsDouble());
+            }
+            case ZEROING: {
+                autoAdjust(0);
             }
         }
     }
-    public static void manual(){
-        switch(turnState){
-            case MANUAL:{
-                turnState=TurnState.AUTOTARGET;
+
+    /**
+     * Toggles zeroing state Default is autotarget
+     */
+    public static void zero() {
+        switch (turnState) {
+            case ZEROING: {
+                turnState = TurnState.AUTOTARGET;
             }
-            default:{
-                turnState=TurnState.MANUAL;
+            default: {
+                turnState = TurnState.ZEROING;
             }
         }
     }
+
+    /**
+     * Toggles manual state Default is autotarget
+     */
+    public static void manual() {
+        switch (turnState) {
+            case MANUAL: {
+                turnState = TurnState.AUTOTARGET;
+            }
+            default: {
+                turnState = TurnState.MANUAL;
+            }
+        }
+    }
+
     /**
      * gets angle from distance
      * 
@@ -70,7 +86,7 @@ public class HoodCommand extends CommandBase {
      */
     private double distToAngle(double distance) {
         /**
-         * fancy calculation
+         * TODO fancy calculation
          */
         return distance;
     }

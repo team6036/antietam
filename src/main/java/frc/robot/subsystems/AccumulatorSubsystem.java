@@ -1,45 +1,94 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
-import frc.robot.RobotContainer;
+import frc.robot.Constants.AccumulatorConstants;
+import frc.robot.Constants.AccumulatorConstants.ExtendState;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class AccumulatorSubsystem extends SubsystemBase {
-  public VictorSP rollerMotor = new VictorSP(Constants.AccumulatorConstants.rollerMotorPort);
-  public VictorSP serializerMotor = new VictorSP(Constants.AccumulatorConstants.serializerMotorPort);
-  public VictorSP ballTubeMotor = new VictorSP(Constants.AccumulatorConstants.ballTubeMotorPort);
+  // Constants
+  private int rollerMotorPort = AccumulatorConstants.rollerMotorPort;
+  private int serializerMotorPort = AccumulatorConstants.serializerMotorPort;
+  private int ballTubeMotorPort = AccumulatorConstants.ballTubeMotorPort;
+  private int solenoid1APort = AccumulatorConstants.solenoid1APort;
+  private int solenoid1BPort = AccumulatorConstants.solenoid1BPort;
 
-  public static DoubleSolenoid solenoid1 = new DoubleSolenoid(Constants.AccumulatorConstants.solenoid1APort,
-      Constants.AccumulatorConstants.solenoid1BPort);
-  public static boolean sensor;
-  public enum State {
-    EXTENDED, RETRACTED
+  // Hardware
+  private VictorSP rollerMotor; // TODO check
+  private VictorSP serializerMotor; // TODO check
+  private VictorSP ballTubeMotor; // TODO check
+  private DoubleSolenoid solenoid; // TODO check
+
+  // Others
+  private ExtendState state = ExtendState.RETRACTED;
+
+  /**
+   * Basic constructor
+   */
+  public AccumulatorSubsystem() {
+    rollerMotor = new VictorSP(rollerMotorPort);
+    serializerMotor = new VictorSP(serializerMotorPort);
+    ballTubeMotor = new VictorSP(ballTubeMotorPort);
+    solenoid = new DoubleSolenoid(solenoid1APort, solenoid1BPort);
   }
 
-  private State state = State.RETRACTED;
+  /**
+   * Hardware feedback
+   */
+  public void debug(){
+    SmartDashboard.putBoolean("Extended", (state.equals(ExtendState.EXTENDED)));
+  }
 
+  /**
+   * Sets roller motor power
+   * 
+   * @param set
+   */
+  public void rollerSet(double set) {
+    rollerMotor.set(set);
+  }
+
+  /**
+   * Sets serializer motor power
+   * 
+   * @param set
+   */
+  public void serializerSet(double set) {
+    serializerMotor.set(set);
+  }
+
+  /**
+   * Sets balltube motor power
+   * 
+   * @param set
+   */
+  public void ballTubeSet(double set) {
+    ballTubeMotor.set(set);
+  }
+
+  /**
+   * Extends accumulator arm
+   */
   public void extend() {
-    if (state == State.EXTENDED) {
+    if (state == ExtendState.EXTENDED) {
       return;
     }
-    solenoid1.set(DoubleSolenoid.Value.kForward);
-    state = State.EXTENDED;
+    solenoid.set(Value.kForward);
+    state = ExtendState.EXTENDED;
   }
 
+  /**
+   * Retracts accumulator arm
+   */
   public void retract() {
-    if (state == State.RETRACTED) {
+    if (state == ExtendState.RETRACTED) {
       return;
     }
 
-    solenoid1.set(DoubleSolenoid.Value.kReverse);
-    state = State.RETRACTED;
-  }
-
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
+    solenoid.set(Value.kReverse);
+    state = ExtendState.RETRACTED;
   }
 }

@@ -7,25 +7,23 @@
 
 package frc.robot.commands;
 
-import frc.robot.Constants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.ShooterSubsystem;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.function.DoubleSupplier;
 import frc.robot.Constants.ShooterConstants.BallStates;
-import edu.wpi.first.wpilibj.AnalogInput;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class ShooterCommand extends CommandBase {
-
-
+  //TODO add debug to all commands
+  //Constants
   private final boolean debug = ShooterConstants.debug;
   private final double kp = ShooterConstants.kp;
 
+  //Hardware
   private final ShooterSubsystem m_shooterSubsystem;
   private DoubleSupplier m_rTrigger;
   
