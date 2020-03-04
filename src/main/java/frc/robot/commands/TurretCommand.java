@@ -74,7 +74,7 @@ public class TurretCommand extends CommandBase {
         }
         case MANUAL: {
 
-            m_turretSubsystem.turn(jStick.getAsDouble());
+            m_turretSubsystem.turn(jStick.getAsDouble() * 0.5);
             //TODO move threshold to the command out of subsystem
         }
         }

@@ -45,23 +45,22 @@ public class ShooterCommand extends CommandBase {
     ballStates.add(BallStates.CONTAINED);
   }
 
-  XboxController controller = new XboxController(Constants.xboxPort);
 
   @Override
   public void execute() {
     if(debug){
       m_shooterSubsystem.debug();
     }
-    // if ball is contained or waiting, makes sure it doesnt come out
-    containBall();
-    // if ball is ready, shoot, if it has left, remove it
-    shootBall();
-    // if ball is contained, ramp up, if contained, stop
-    setVelocity();
-    // if past a threshold, set all to waiting, if medium, only one, if low, do nothing
-    handleJoystick();
-    // if no balls, stop
-    reset();
+    // // if ball is contained or waiting, makes sure it doesnt come out
+    // containBall();
+    // // if ball is ready, shoot, if it has left, remove it
+    // shootBall();
+    // // if ball is contained, ramp up, if contained, stop
+    // setVelocity();
+    // // if past a threshold, set all to waiting, if medium, only one, if low, do nothing
+    // handleJoystick();
+    // // if no balls, stop
+    // reset();
 
     /**
     if(controller.getBButton()){
@@ -74,16 +73,18 @@ public class ShooterCommand extends CommandBase {
     }
 
 
-
+*/
     if(m_rTrigger.getAsDouble() < 0.05){
       m_shooterSubsystem.setShooterVelocity(0.0);
+      m_shooterSubsystem.setHopupVelocity(0.0);
     }else{
       m_shooterSubsystem.setShooterVelocity(m_rTrigger.getAsDouble());
+      m_shooterSubsystem.setHopupVelocity(-0.99);
     //  m_shooterSubsystem.setHopupVelocity(-0.5);
      SmartDashboard.putNumber("Shooter velocity", m_shooterSubsystem.getShooterVelocity());
     
     }
-    */
+    
   }
 
   /**

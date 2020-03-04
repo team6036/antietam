@@ -10,6 +10,7 @@ import frc.robot.RobotContainer;
 public class AccumulatorSubsystem extends SubsystemBase {
   public VictorSP rollerMotor = new VictorSP(Constants.AccumulatorConstants.rollerMotorPort);
   public VictorSP serializerMotor = new VictorSP(Constants.AccumulatorConstants.serializerMotorPort);
+  public VictorSP ballTubeMotor = new VictorSP(Constants.AccumulatorConstants.ballTubeMotorPort);
 
   public static DoubleSolenoid solenoid1 = new DoubleSolenoid(Constants.AccumulatorConstants.solenoid1APort,
       Constants.AccumulatorConstants.solenoid1BPort);

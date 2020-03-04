@@ -10,7 +10,7 @@ import frc.robot.Limelight;
 
 public class HoodCommand extends CommandBase {
 
-    private static TurnState turnState = TurnState.AUTOTARGET;
+    private static TurnState turnState = TurnState.MANUAL;
     private double kp = HoodConstants.kp;
 
     private HoodSubsystem m_hoodSubsystem;
@@ -21,6 +21,7 @@ public class HoodCommand extends CommandBase {
         this.m_hoodSubsystem = m_hoodSubsystem;
         this.jStick = jStick;
         controller = new PIDController(kp, 0, 0);
+        addRequirements(m_hoodSubsystem);
     }
 
     // inside the HoodCommand
@@ -34,7 +35,7 @@ public class HoodCommand extends CommandBase {
             autoAdjust(distToAngle(Limelight.getDistance()));
         }
         case MANUAL: {
-            m_hoodSubsystem.turn(jStick.getAsDouble());
+           // m_hoodSubsystem.turn(jStick.getAsDouble());
         }
         case ZEROING: {
             autoAdjust(0);

@@ -22,6 +22,6 @@ public class HoodSubsystem extends SubsystemBase {
     }
     
     public void turn(double input) {
-        motor.set(input*0.00001); //TODO tune
+        motor.set(input); //TODO tune
     }
 }

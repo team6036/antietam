@@ -63,7 +63,7 @@ public class RobotContainer {
   private final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
   private final ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem();
   private final TurretSubsystem m_turretSubsystem = new TurretSubsystem();
-  ///private final HoodSubsystem m_hoodSubsystem = new HoodSubsystem();
+  private final HoodSubsystem m_hoodSubsystem = new HoodSubsystem();
 
   private final DrivetrainCommand m_drivetrainCommand = new DrivetrainCommand(m_drivetrainSubsystem,
       () -> m_joystick.getY(), () -> m_joystick.getX());
@@ -71,7 +71,7 @@ public class RobotContainer {
       () -> m_controller.getTriggerAxis(Hand.kRight));
   private final TurretCommand m_turretCommand = new TurretCommand(m_turretSubsystem,
       () -> m_controller.getX(Hand.kLeft));
- // private final HoodCommand m_hoodCommand = new HoodCommand(m_hoodSubsystem, () -> m_controller.getY(Hand.kRight));
+ private final HoodCommand m_hoodCommand = new HoodCommand(m_hoodSubsystem, () -> m_controller.getY(Hand.kRight));
   
   private final Consumer<Boolean> addBall = (v) ->{
     //m_shooterCommand.addBall();
@@ -93,7 +93,7 @@ public class RobotContainer {
     CommandScheduler.getInstance().setDefaultCommand(m_drivetrainSubsystem, m_drivetrainCommand);
     CommandScheduler.getInstance().setDefaultCommand(m_shooterSubsystem, m_shooterCommand);
     CommandScheduler.getInstance().setDefaultCommand(m_turretSubsystem, m_turretCommand);
-    //CommandScheduler.getInstance().setDefaultCommand(m_hoodSubsystem, m_hoodCommand);
+    CommandScheduler.getInstance().setDefaultCommand(m_hoodSubsystem, m_hoodCommand);
 
     // Configure the button bindings
     configureButtonBindings();
