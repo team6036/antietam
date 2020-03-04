@@ -22,12 +22,11 @@ public class ShooterCommand extends CommandBase {
   private final boolean debug = ShooterConstants.debug;
   private final double kp = ShooterConstants.kp;
 
-  //Hardware
+  //Controllers
   private final ShooterSubsystem m_shooterSubsystem;
   private DoubleSupplier m_rTrigger;
   
-
-
+  //Other
   private ArrayList<BallStates> ballStates = new ArrayList<>(
       Arrays.asList(new BallStates[] { BallStates.CONTAINED, BallStates.CONTAINED, BallStates.CONTAINED }));
   private PIDController pidController = new PIDController(kp, 0, 0);
@@ -65,16 +64,16 @@ public class ShooterCommand extends CommandBase {
       if (m_shooterSubsystem.getLineBreak()) {
         m_shooterSubsystem.setHopupVelocity(-0.1);
       }
-      return;
+      break;
     }
     case WAITING: {
       if (m_shooterSubsystem.getLineBreak()) {
         m_shooterSubsystem.setHopupVelocity(-0.1);
       }
-      return;
+      break;
     }
     default: {
-      return;
+      break;
     }
     }
   }
@@ -90,16 +89,16 @@ public class ShooterCommand extends CommandBase {
       if (m_shooterSubsystem.getLineBreak()) {
         ballStates.set(0, BallStates.LEAVING);
       }
-      return;
+      break;
     }
     case LEAVING: {
       if (!m_shooterSubsystem.getLineBreak()) {
         ballStates.remove(0);
       }
-      return;
+      break;
     }
     default: {
-      return;
+      break;
     }
     }
 
@@ -118,14 +117,14 @@ public class ShooterCommand extends CommandBase {
       } else {
         m_shooterSubsystem.setShooterVelocity(pidController.calculate(m_shooterSubsystem.getShooterVelocity()));
       }
-      return;
+      break;
     }
     case CONTAINED: {
       pidController.setSetpoint(0);
-      return;
+      break;
     }
     default: {
-      return;
+      break;
     }
     }
   }

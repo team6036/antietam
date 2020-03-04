@@ -10,11 +10,15 @@ import frc.robot.Constants.TurretConstants.TurretMode;
 import frc.robot.Constants.TurretConstants;
 
 public class TurretCommand extends CommandBase {
-
-    private TurretSubsystem m_turretSubsystem;
-    private DoubleSupplier jStick;
+    // Constants
     private double kp = TurretConstants.kp;
     private static TurretMode turretMode = TurretMode.MANUAL;
+
+    // Hardware
+    private TurretSubsystem m_turretSubsystem;
+    private DoubleSupplier jStick;
+
+    // Others
     private PIDController pidController = new PIDController(kp, 0, 0);
 
     /**
@@ -31,6 +35,7 @@ public class TurretCommand extends CommandBase {
         addRequirements(m_turretSubsystem);
     }
 
+    // TODO change these static functions to nonstatic, make lambdas
     /**
      * gobally callable; sets turret mode to threePoint
      */
@@ -60,23 +65,25 @@ public class TurretCommand extends CommandBase {
     @Override
     public void execute() {
 
-        //m_turretSubsystem.turn(0.1);
+        // m_turretSubsystem.turn(0.1);
         switch (turretMode) {
-        case TWOPOINT: {
-            if (Limelight.ta() != 0) {
-                autoTarget(Limelight.tx());
-            } else {
-                seek();
+            case TWOPOINT: {
+                if (Limelight.ta() != 0) {
+                    autoTarget(Limelight.tx());
+                } else {
+                    seek();
+                }
+                break;
             }
-        }
-        case THREEPOINT: {
-            zero(m_turretSubsystem.getDisplacement());
-        }
-        case MANUAL: {
-
-            m_turretSubsystem.turn(jStick.getAsDouble() * 0.5);
-            //TODO move threshold to the command out of subsystem
-        }
+            case THREEPOINT: {
+                zero(m_turretSubsystem.getDisplacement());
+                break;
+            }
+            case MANUAL: {
+                m_turretSubsystem.turn(jStick.getAsDouble() * 0.5);
+                // TODO move threshold to the command out of subsystem
+                break;
+            }
         }
     }
 
@@ -98,8 +105,8 @@ public class TurretCommand extends CommandBase {
 
     /**
      * turns drivetrain to match turret,
-     */ 
-    //todo make sure to make the turret turn opposite so the error gets reduced lol
+     */
+    // todo make sure to make the turret turn opposite so the error gets reduced lol
     public void zero(double d) {
         DrivetrainCommand.drive(pidController.calculate(d), -pidController.calculate(d)); // check polarity
     }

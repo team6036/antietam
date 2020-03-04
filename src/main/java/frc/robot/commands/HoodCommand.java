@@ -9,20 +9,20 @@ import frc.robot.subsystems.HoodSubsystem;
 import frc.robot.Limelight;
 
 public class HoodCommand extends CommandBase {
-    //Constants
+    // Constants
     private static TurnState turnState = TurnState.MANUAL;
     private double kp = HoodConstants.kp;
 
-    //Hardware
+    // Hardware
     private HoodSubsystem m_hoodSubsystem;
     private DoubleSupplier jStick;
     private PIDController controller;
 
     /**
-     * Basic constructor 
+     * Basic constructor
      * 
      * @param m_hoodSubsystem
-     * @param jStick for manual hood control
+     * @param jStick          for manual hood control
      */
     public HoodCommand(HoodSubsystem m_hoodSubsystem, DoubleSupplier jStick) {
         this.m_hoodSubsystem = m_hoodSubsystem;
@@ -40,12 +40,15 @@ public class HoodCommand extends CommandBase {
         switch (turnState) {
             case AUTOTARGET: {
                 autoAdjust(distToAngle(Limelight.getDistance()));
+                break;
             }
             case MANUAL: {
                 m_hoodSubsystem.turn(jStick.getAsDouble());
+                break;
             }
             case ZEROING: {
                 autoAdjust(0);
+                break;
             }
         }
     }
@@ -53,17 +56,20 @@ public class HoodCommand extends CommandBase {
     /**
      * Toggles zeroing state Default is autotarget
      */
-    public static void zero() {
+    public void zero() {
         switch (turnState) {
             case ZEROING: {
                 turnState = TurnState.AUTOTARGET;
+                break;
             }
             default: {
                 turnState = TurnState.ZEROING;
+                break;
             }
         }
     }
 
+    // TODO: make this not static, pass lambdas
     /**
      * Toggles manual state Default is autotarget
      */
@@ -71,9 +77,11 @@ public class HoodCommand extends CommandBase {
         switch (turnState) {
             case MANUAL: {
                 turnState = TurnState.AUTOTARGET;
+                break;
             }
             default: {
                 turnState = TurnState.MANUAL;
+                break;
             }
         }
     }

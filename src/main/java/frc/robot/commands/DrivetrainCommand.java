@@ -9,11 +9,15 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
  * An example command that uses an example subsystem.
  */
 public class DrivetrainCommand extends CommandBase {
+  //Constants
+  private ControlState controlState = ControlState.MANUAL;
 
+  //Hardware
   private DoubleSupplier getX, getY;
   private final DrivetrainSubsystem m_drivetrain;
+
+  //Others
   private static double leftSet, rightSet;
-  private ControlState controlState = ControlState.MANUAL;
 
   /**
    * Basic constructor
@@ -66,11 +70,11 @@ public class DrivetrainCommand extends CommandBase {
     switch (controlState) {
       case MANUAL: {
         m_drivetrain.drive(getY.getAsDouble(), getX.getAsDouble());
-        return;
+        break;
       }
       default: {
         m_drivetrain.lowLevelDrive(leftSet, rightSet);
-        return;
+        break;
       }
     }
   }

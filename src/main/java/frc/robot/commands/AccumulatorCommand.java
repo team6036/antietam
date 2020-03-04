@@ -20,7 +20,7 @@ public class AccumulatorCommand extends CommandBase {
    * Basic constructor
    * 
    * @param accumulator the subsystem
-   * @param supplier xbox trigger
+   * @param supplier    xbox trigger
    * @param addBall
    */
   public AccumulatorCommand(AccumulatorSubsystem accumulator, DoubleSupplier supplier, Consumer<Boolean> addBall) {
@@ -30,25 +30,23 @@ public class AccumulatorCommand extends CommandBase {
     addRequirements(accumulator);
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
+  /**
+   * Runs the accumulator if trigger is pressed, if else, set it to stop
+   */
   @Override
   public void execute() {
     if (debug) {
       m_accumulator.debug();
     }
-    // if trigger is being pressed, run flywheel and ballAlignment motors
     if (m_xbox.getAsDouble() > 0.05) {
 
       m_accumulator.rollerSet(Constants.AccumulatorConstants.rollerMotorPower);
       m_accumulator.serializerSet(Constants.AccumulatorConstants.serializerMotorPower);
       m_accumulator.ballTubeSet(Constants.AccumulatorConstants.ballTubeMotorPower);
     } else {
-      // trigger is not being pressed, so stop motor power
-      if (m_xbox.getAsDouble() <= 0.05) {
-        m_accumulator.rollerSet(0.0);
-        m_accumulator.serializerSet(0.0);
-        m_accumulator.ballTubeSet(0.0);
-      }
+      m_accumulator.rollerSet(0.0);
+      m_accumulator.serializerSet(0.0);
+      m_accumulator.ballTubeSet(0.0);
     }
   }
 }

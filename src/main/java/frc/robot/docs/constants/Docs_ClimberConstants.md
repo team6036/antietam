@@ -1,2 +1,0 @@
-# Climber Constants
-##//todo

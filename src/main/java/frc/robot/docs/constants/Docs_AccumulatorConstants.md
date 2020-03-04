@@ -1,2 +1,0 @@
-# Accumulator Constants
-##//todo

@@ -1,2 +1,0 @@
-# Shooter Constants
-##//todo
