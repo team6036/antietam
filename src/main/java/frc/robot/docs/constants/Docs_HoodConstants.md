@@ -1,0 +1,2 @@
+# Hood Constants
+##//todo
