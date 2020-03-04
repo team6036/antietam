@@ -2,7 +2,7 @@
 The following are the key pieces of code that control the robot.
 ## 1. <a href="https://github.com/team6036/antietam/tree/master/src/main/java/frc/robot/Constants.java">Constants.java</a>:
 
- * <a href="https://github.com/team6036/antietam/tree/master/blob/master/docs/commands/Docs_AccumulatorCommand.md">Accumulator Constants</a>
+ * <a href="https://github.com/team6036/antietam/tree/master/docs/commands/Docs_AccumulatorCommand.md">Accumulator Constants</a>
 
  * <a href="https://github.com/team6036/antietam/tree/master/docs/constants/Docs_ClimberConstants.md">Climber Constants</a>
 
