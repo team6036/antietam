@@ -14,7 +14,6 @@ import java.util.Arrays;
 import java.util.function.DoubleSupplier;
 import frc.robot.Constants.ShooterConstants.BallStates;
 import edu.wpi.first.wpilibj.controller.PIDController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class ShooterCommand extends CommandBase {
@@ -49,40 +48,11 @@ public class ShooterCommand extends CommandBase {
     if(debug){
       m_shooterSubsystem.debug();
     }
-    // // if ball is contained or waiting, makes sure it doesnt come out
-    // containBall();
-    // // if ball is ready, shoot, if it has left, remove it
-    // shootBall();
-    // // if ball is contained, ramp up, if contained, stop
-    // setVelocity();
-    // // if past a threshold, set all to waiting, if medium, only one, if low, do nothing
-    // handleJoystick();
-    // // if no balls, stop
-    // reset();
-
-    /**
-    if(controller.getBButton()){
-      m_shooterSubsystem.setHopupVelocity(-0.5);
-    }
-    if(controller.getXButton()){
-      m_shooterSubsystem.setHopupVelocity(0.5);
-    }else{
-      m_shooterSubsystem.setHopupVelocity(0.0);
-    }
-
-
-*/
-    if(m_rTrigger.getAsDouble() < 0.05){
-      m_shooterSubsystem.setShooterVelocity(0.0);
-      m_shooterSubsystem.setHopupVelocity(0.0);
-    }else{
-      m_shooterSubsystem.setShooterVelocity(m_rTrigger.getAsDouble());
-      m_shooterSubsystem.setHopupVelocity(-0.99);
-    //  m_shooterSubsystem.setHopupVelocity(-0.5);
-     SmartDashboard.putNumber("Shooter velocity", m_shooterSubsystem.getShooterVelocity());
-    
-    }
-    
+    containBall();
+    shootBall();
+    setVelocity();
+    handleJoystick();
+    reset();
   }
 
   /**
