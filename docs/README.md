@@ -1,5 +1,5 @@
-# 2020 Robot Code: Antietam
-The following are the key pieces of code that control the robot.
+# Antietam (2020) Documentation Homepage
+Click a link below to see documentation for that part of the code.
 ## 1. <a href="https://github.com/team6036/antietam/blob/limelight/src/main/java/frc/robot/Constants.java">Constants.java</a>:
 
  * <a href="https://github.com/team6036/antietam/docs/constants/Docs_AccumulatorConstants.md">Accumulator Constants</a>
