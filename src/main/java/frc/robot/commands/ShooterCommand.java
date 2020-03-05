@@ -17,16 +17,16 @@ import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class ShooterCommand extends CommandBase {
-  //TODO add debug to all commands
-  //Constants
+  // TODO add debug to all commands
+  // Constants
   private final boolean debug = ShooterConstants.debug;
   private final double kp = ShooterConstants.kp;
 
-  //Controllers
+  // Controllers
   private final ShooterSubsystem m_shooterSubsystem;
   private DoubleSupplier m_rTrigger;
-  
-  //Other
+
+  // Other
   private ArrayList<BallStates> ballStates = new ArrayList<>(
       Arrays.asList(new BallStates[] { BallStates.CONTAINED, BallStates.CONTAINED, BallStates.CONTAINED }));
   private PIDController pidController = new PIDController(kp, 0, 0);
@@ -41,14 +41,12 @@ public class ShooterCommand extends CommandBase {
     ballStates.add(BallStates.CONTAINED);
   }
 
-
   @Override
   public void execute() {
-    if(debug){
+    if (debug) {
       m_shooterSubsystem.debug();
     }
-    containBall();
-    shootBall();
+    handleBall();
     setVelocity();
     handleJoystick();
     reset();
@@ -56,52 +54,38 @@ public class ShooterCommand extends CommandBase {
 
   /**
    * CointainBall() makes sure nothing comes out, spins backwards if it do, only
-   * when contained or waiting
+   * when contained or waiting, if ball is ready, feeds ball, once it detects it,
+   * sets ball to leaving If ball is leaving, and no longer being detected,
+   * deletes it
    */
-  private void containBall() {
+  private void handleBall() {
     switch (ballStates.get(0)) {
-    case CONTAINED: {
-      if (m_shooterSubsystem.getLineBreak()) {
-        m_shooterSubsystem.setHopupVelocity(-0.1);
+      case CONTAINED: {
+        if (m_shooterSubsystem.getLineBreak()) {
+          m_shooterSubsystem.setHopupVelocity(-0.1);
+        }
+        break;
       }
-      break;
-    }
-    case WAITING: {
-      if (m_shooterSubsystem.getLineBreak()) {
-        m_shooterSubsystem.setHopupVelocity(-0.1);
+      case WAITING: {
+        if (m_shooterSubsystem.getLineBreak()) {
+          m_shooterSubsystem.setHopupVelocity(-0.1);
+        }
+        break;
       }
-      break;
-    }
-    default: {
-      break;
-    }
-    }
-  }
-
-  /**
-   * Shootball() If ball is ready, feeds ball, once it detects it, sets ball to
-   * leaving If ball is leaving, and no longer being detected, deletes it
-   */
-  private void shootBall() {
-    switch (ballStates.get(0)) {
-    case READY: {
-      m_shooterSubsystem.setHopupVelocity(0.1); //TODO change this to final
-      if (m_shooterSubsystem.getLineBreak()) {
-        ballStates.set(0, BallStates.LEAVING);
+      case READY: {
+        m_shooterSubsystem.setHopupVelocity(0.1); // TODO change this to something reasonable
+        if (m_shooterSubsystem.getLineBreak()) {
+          ballStates.set(0, BallStates.LEAVING);
+        }
+        break;
       }
-      break;
-    }
-    case LEAVING: {
-      if (!m_shooterSubsystem.getLineBreak()) {
-        ballStates.remove(0);
+      case LEAVING: {
+        if (!m_shooterSubsystem.getLineBreak()) {
+          ballStates.remove(0);
+        }
+        break;
       }
-      break;
     }
-    default: {
-      break;
-    }
-    }
-
   }
 
   /**
@@ -110,22 +94,31 @@ public class ShooterCommand extends CommandBase {
    */
   private void setVelocity() {
     switch (ballStates.get(0)) {
-    case WAITING: {
-      pidController.setSetpoint(0.1); // TODO this needs to be changed to target speed
-      if (pidController.getSetpoint() == m_shooterSubsystem.getShooterVelocity()) {
-        ballStates.set(0, BallStates.READY);
-      } else {
-        m_shooterSubsystem.setShooterVelocity(pidController.calculate(m_shooterSubsystem.getShooterVelocity()));
+      case WAITING: {
+        pidController.setSetpoint(0.1); // TODO this needs to be changed to target speed
+        if (pidController.getSetpoint() == m_shooterSubsystem.getShooterVelocity()) {
+          ballStates.set(0, BallStates.READY);
+        } else {
+          m_shooterSubsystem.setShooterVelocity(pidController.calculate(m_shooterSubsystem.getShooterVelocity()));
+        }
+        break;
       }
-      break;
-    }
-    case CONTAINED: {
-      pidController.setSetpoint(0);
-      break;
-    }
-    default: {
-      break;
-    }
+      case READY: {
+        pidController.setSetpoint(0.1); // TODO this needs to be changed to target speed
+        if (pidController.getSetpoint() == m_shooterSubsystem.getShooterVelocity()) {
+          ballStates.set(0, BallStates.READY);
+        } else {
+          m_shooterSubsystem.setShooterVelocity(pidController.calculate(m_shooterSubsystem.getShooterVelocity()));
+        }
+        break;
+      }
+      case CONTAINED: {
+        pidController.setSetpoint(0);
+        break;
+      }
+      default: {
+        break;
+      }
     }
   }
 
