@@ -8,14 +8,17 @@ import edu.wpi.first.wpilibj.AnalogPotentiometer;
 public class AbsoluteEncoder {
     private double offset = 0.0;
     private AnalogPotentiometer pot;
-    public AbsoluteEncoder(AnalogPotentiometer pot){
+
+    public AbsoluteEncoder(AnalogPotentiometer pot) {
         this.pot = pot;
     }
-    public double getAngle(){
+
+    public double getAngle() {
         return this.pot.get() + offset;
         // return this.pot.get();
     }
-    public void reset(){
+
+    public void reset() {
         offset = -1 * pot.get();
     }
 }

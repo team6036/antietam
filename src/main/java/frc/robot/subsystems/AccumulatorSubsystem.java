@@ -17,10 +17,10 @@ public class AccumulatorSubsystem extends SubsystemBase {
   private int solenoid1BPort = AccumulatorConstants.solenoid1BPort;
 
   // Hardware
-  private VictorSP rollerMotor; // TODO check
-  private VictorSP serializerMotor; // TODO check
-  private VictorSP ballTubeMotor; // TODO check
-  private DoubleSolenoid solenoid; // TODO check
+  private VictorSP rollerMotor;
+  private VictorSP serializerMotor;
+  private VictorSP ballTubeMotor;
+  private DoubleSolenoid solenoid;
 
   // Others
   private ExtendState state = ExtendState.RETRACTED;
@@ -38,7 +38,7 @@ public class AccumulatorSubsystem extends SubsystemBase {
   /**
    * Hardware feedback
    */
-  public void debug(){
+  public void debug() {
     SmartDashboard.putBoolean("Extended", (state.equals(ExtendState.EXTENDED)));
   }
 

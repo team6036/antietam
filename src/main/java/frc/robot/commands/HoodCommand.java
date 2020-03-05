@@ -12,6 +12,7 @@ public class HoodCommand extends CommandBase {
     // Constants
     private static TurnState turnState = TurnState.MANUAL;
     private double kp = HoodConstants.kp;
+    private boolean debug = HoodConstants.debug;
 
     // Hardware
     private HoodSubsystem m_hoodSubsystem;
@@ -37,6 +38,9 @@ public class HoodCommand extends CommandBase {
      */
     @Override
     public void execute() {
+        if (debug) {
+            m_hoodSubsystem.debug();
+        }
         switch (turnState) {
             case AUTOTARGET: {
                 autoAdjust(distToAngle(Limelight.getDistance()));

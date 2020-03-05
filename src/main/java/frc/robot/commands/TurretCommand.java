@@ -13,6 +13,7 @@ public class TurretCommand extends CommandBase {
     // Constants
     private double kp = TurretConstants.kp;
     private static TurretMode turretMode = TurretMode.MANUAL;
+    private boolean debug = TurretConstants.debug;
 
     // Hardware
     private TurretSubsystem m_turretSubsystem;
@@ -64,7 +65,9 @@ public class TurretCommand extends CommandBase {
      */
     @Override
     public void execute() {
-
+        if (debug) {
+            m_turretSubsystem.debug();
+        }
         // m_turretSubsystem.turn(0.1);
         switch (turretMode) {
             case TWOPOINT: {

@@ -30,10 +30,12 @@ public class Limelight {
         }
         return retval;
     }
+
     public static double getDistance() {
         return NetworkTableInstance.getDefault().getTable("limelight").getEntry("camtran")
                 .getDoubleArray(new double[] {})[2];
     }
+
     // sends all of the crap
     public static void debug() {
         SmartDashboard.putNumber("TX", tx());

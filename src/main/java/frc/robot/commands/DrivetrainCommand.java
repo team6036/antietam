@@ -1,6 +1,8 @@
 package frc.robot.commands;
 
 import java.util.function.DoubleSupplier;
+
+import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.Constants.DrivetrainConstants.ControlState;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -9,14 +11,15 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
  * An example command that uses an example subsystem.
  */
 public class DrivetrainCommand extends CommandBase {
-  //Constants
+  // Constants
   private ControlState controlState = ControlState.MANUAL;
+  private boolean debug = DrivetrainConstants.debug;
 
-  //Hardware
+  // Hardware
   private DoubleSupplier getX, getY;
   private final DrivetrainSubsystem m_drivetrain;
 
-  //Others
+  // Others
   private static double leftSet, rightSet;
 
   /**
@@ -67,6 +70,9 @@ public class DrivetrainCommand extends CommandBase {
    */
   @Override
   public void execute() {
+    if (debug) {
+      m_drivetrain.debug();
+    }
     switch (controlState) {
       case MANUAL: {
         m_drivetrain.drive(getY.getAsDouble(), getX.getAsDouble());

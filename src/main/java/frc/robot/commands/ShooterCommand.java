@@ -17,7 +17,6 @@ import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class ShooterCommand extends CommandBase {
-  // TODO add debug to all commands
   // Constants
   private final boolean debug = ShooterConstants.debug;
   private final double kp = ShooterConstants.kp;
@@ -53,7 +52,7 @@ public class ShooterCommand extends CommandBase {
   }
 
   /**
-   * CointainBall() makes sure nothing comes out, spins backwards if it do, only
+   * handleBall() makes sure nothing comes out, spins backwards if it do, only
    * when contained or waiting, if ball is ready, feeds ball, once it detects it,
    * sets ball to leaving If ball is leaving, and no longer being detected,
    * deletes it

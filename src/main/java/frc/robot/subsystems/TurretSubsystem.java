@@ -19,7 +19,7 @@ public class TurretSubsystem extends SubsystemBase {
     private AbsoluteEncoder absEncoder;
     private double power = 0;
 
-    //Others
+    // Others
 
     /**
      * Basic constructors
