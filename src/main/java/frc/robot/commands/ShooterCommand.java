@@ -29,6 +29,7 @@ public class ShooterCommand extends CommandBase {
   private final ShooterSubsystem m_shooterSubsystem;
   private DoubleSupplier m_rTrigger;
   
+  private boolean ballSensorIn = true;
 
 
   private ArrayList<BallStates> ballStates = new ArrayList<>(
@@ -38,6 +39,7 @@ public class ShooterCommand extends CommandBase {
   public ShooterCommand(ShooterSubsystem shooterSubsystem, DoubleSupplier rTrigger) {
     m_shooterSubsystem = shooterSubsystem;
     this.m_rTrigger = rTrigger;
+    balls = 0;
     addRequirements(shooterSubsystem); // @TODO this for all commands and respective key subsystems
   }
 
@@ -84,9 +86,21 @@ public class ShooterCommand extends CommandBase {
      SmartDashboard.putNumber("Shooter velocity", m_shooterSubsystem.getShooterVelocity());
     
     }
-    
-  }
+    m_shooterSubsystem.debug();
+    countBall();
 
+  }
+  private int balls = 0;
+  private void countBall(){
+    SmartDashboard.putNumber("balls in", balls);
+    if(!ballSensorIn){
+      if(m_shooterSubsystem.getLineBreakIn()){
+        balls++;
+        
+      }
+    }
+    ballSensorIn = m_shooterSubsystem.getLineBreakIn();
+  }
   /**
    * CointainBall() makes sure nothing comes out, spins backwards if it do, only
    * when contained or waiting
@@ -94,13 +108,13 @@ public class ShooterCommand extends CommandBase {
   private void containBall() {
     switch (ballStates.get(0)) {
     case CONTAINED: {
-      if (m_shooterSubsystem.getLineBreak()) {
+      if (m_shooterSubsystem.getLineBreakOut()) {
         m_shooterSubsystem.setHopupVelocity(-0.1);
       }
       return;
     }
     case WAITING: {
-      if (m_shooterSubsystem.getLineBreak()) {
+      if (m_shooterSubsystem.getLineBreakOut()) {
         m_shooterSubsystem.setHopupVelocity(-0.1);
       }
       return;
@@ -119,13 +133,13 @@ public class ShooterCommand extends CommandBase {
     switch (ballStates.get(0)) {
     case READY: {
       m_shooterSubsystem.setHopupVelocity(0.1); //TODO change this to final
-      if (m_shooterSubsystem.getLineBreak()) {
+      if (m_shooterSubsystem.getLineBreakOut()) {
         ballStates.set(0, BallStates.LEAVING);
       }
       return;
     }
     case LEAVING: {
-      if (!m_shooterSubsystem.getLineBreak()) {
+      if (!m_shooterSubsystem.getLineBreakOut()) {
         ballStates.remove(0);
       }
       return;

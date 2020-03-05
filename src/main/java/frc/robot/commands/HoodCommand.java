@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import java.util.function.DoubleSupplier;
 import frc.robot.Constants.HoodConstants.TurnState;
@@ -30,15 +31,23 @@ public class HoodCommand extends CommandBase {
      */
     @Override
     public void execute() {
+        SmartDashboard.putNumber("Hood optical", m_hoodSubsystem.getOpticalEncoder());
+        SmartDashboard.putNumber("Hood dce", m_hoodSubsystem.getAngle());
         switch (turnState) {
         case AUTOTARGET: {
             autoAdjust(distToAngle(Limelight.getDistance()));
+            break;
         }
         case MANUAL: {
-           // m_hoodSubsystem.turn(jStick.getAsDouble());
+            m_hoodSubsystem.turn(jStick.getAsDouble());
+
+            
+           //System.out.println(jStick.getAsDouble());
+           break;
         }
         case ZEROING: {
-            autoAdjust(0);
+            //autoAdjust(0);
+            break;
         }
         }
     }
