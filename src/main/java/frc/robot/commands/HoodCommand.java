@@ -48,10 +48,12 @@ public class HoodCommand extends CommandBase {
             }
             case MANUAL: {
                 m_hoodSubsystem.turn(jStick.getAsDouble());
+
+                // System.out.println(jStick.getAsDouble());
                 break;
             }
             case ZEROING: {
-                autoAdjust(0);
+                // autoAdjust(0);
                 break;
             }
         }

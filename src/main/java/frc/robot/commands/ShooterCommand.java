@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.function.DoubleSupplier;
 import frc.robot.Constants.ShooterConstants.BallStates;
 import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class ShooterCommand extends CommandBase {
@@ -25,6 +26,8 @@ public class ShooterCommand extends CommandBase {
   private final ShooterSubsystem m_shooterSubsystem;
   private DoubleSupplier m_rTrigger;
 
+  private boolean ballSensorIn = true;
+
   // Other
   private ArrayList<BallStates> ballStates = new ArrayList<>(
       Arrays.asList(new BallStates[] { BallStates.CONTAINED, BallStates.CONTAINED, BallStates.CONTAINED }));
@@ -33,6 +36,7 @@ public class ShooterCommand extends CommandBase {
   public ShooterCommand(ShooterSubsystem shooterSubsystem, DoubleSupplier rTrigger) {
     m_shooterSubsystem = shooterSubsystem;
     this.m_rTrigger = rTrigger;
+    balls = 0;
     addRequirements(shooterSubsystem); // @TODO this for all commands and respective key subsystems
   }
 
@@ -45,10 +49,43 @@ public class ShooterCommand extends CommandBase {
     if (debug) {
       m_shooterSubsystem.debug();
     }
-    handleBall();
-    setVelocity();
-    handleJoystick();
-    reset();
+    // if ball is contained or waiting, makes sure it doesnt come out
+    // containBall();
+    // if ball is ready, shoot, if it has left, remove it
+    // shootBall();
+    // if ball is contained, ramp up, if contained, stop
+    // setVelocity();
+    // if past a threshold, set all to waiting, if medium, only one, if low, do
+    // nothing
+    // handleJoystick();
+    // if no balls, stop
+    // reset();
+    if (m_rTrigger.getAsDouble() < 0.05) {
+      m_shooterSubsystem.setShooterVelocity(0.0);
+      m_shooterSubsystem.setHopupVelocity(0.0);
+    } else {
+      m_shooterSubsystem.setShooterVelocity(m_rTrigger.getAsDouble());
+      m_shooterSubsystem.setHopupVelocity(-0.99);
+      // m_shooterSubsystem.setHopupVelocity(-0.5);
+      SmartDashboard.putNumber("Shooter velocity", m_shooterSubsystem.getShooterVelocity());
+
+    }
+    m_shooterSubsystem.debug();
+    countBall();
+
+  }
+
+  private int balls = 0;
+
+  private void countBall() {
+    SmartDashboard.putNumber("balls in", balls);
+    if (!ballSensorIn) {
+      if (m_shooterSubsystem.getLineBreak()) {
+        balls++;
+
+      }
+    }
+    ballSensorIn = m_shooterSubsystem.getLineBreak();
   }
 
   /**
@@ -125,7 +162,7 @@ public class ShooterCommand extends CommandBase {
    * HandleJoystick() if after a certain threshold, set first to waiting, if after
    * another, set all to waiting
    */
-  public void handleJoystick() {
+  private void handleJoystick() {
     if (m_rTrigger.getAsDouble() > 0.5) {
       for (int i = 0; i < ballStates.size(); i++) {
         ballStates.set(i, BallStates.WAITING);
@@ -140,7 +177,7 @@ public class ShooterCommand extends CommandBase {
   /**
    * reset() if next is contained, set velocity to minimum
    */
-  public void reset() {
+  private void reset() {
     if (ballStates.get(0) == BallStates.CONTAINED) {
       m_shooterSubsystem.setShooterVelocity(0);
     }

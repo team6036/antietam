@@ -96,11 +96,12 @@ public class RobotContainer {
    * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    m_leftBumper.whenPressed(new InstantCommand(() -> m_accumulatorSubsystem.extend()));
-    m_rightBumper.whenPressed(new InstantCommand(() -> m_accumulatorSubsystem.retract()));
+    //eftBumper.whenPressed(new InstantCommand(() -> m_accumulatorSubsystem.extend()));
+    //RightBumper.whenPressed(new InstantCommand(() -> m_accumulatorSubsystem.retract()));
     m_xButton.whenPressed(new InstantCommand(() -> manualTarget()));
     m_aButton.whenPressed(new InstantCommand(() -> m_hoodCommand.zero()));
     m_threePointButton.whenPressed(new InstantCommand(() -> threePoint()));
+
   }
 
   private void threePoint() {

@@ -29,7 +29,7 @@ public final class Constants {
         }
 
         public static final boolean debug = false;
-        public static final int motorPort = 5;
+        public static final int motorPort = 6;
         public static final int encoderPort = 5;
         public static final double kp = 0.00001;
     }
@@ -78,7 +78,7 @@ public final class Constants {
 
         public static final int firstShooterPort = 6;
         public static final int secondShooterPort = 7;
-        public static final int hopupPort = 6;
+        public static final int hopupPort = 4;
         public static final int lineBreakPort = 0;
         public static final double kp = 0.00001;
 
