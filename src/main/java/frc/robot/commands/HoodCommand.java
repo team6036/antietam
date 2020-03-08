@@ -11,7 +11,7 @@ import frc.robot.Limelight;
 
 public class HoodCommand extends CommandBase {
 
-    private static TurnState turnState = TurnState.MANUAL;
+    private static TurnState turnState = TurnState.AUTOTARGET;
     private double kp = HoodConstants.kp;
 
     private HoodSubsystem m_hoodSubsystem;
@@ -23,6 +23,9 @@ public class HoodCommand extends CommandBase {
         this.jStick = jStick;
         controller = new PIDController(kp, 0, 0);
         addRequirements(m_hoodSubsystem);
+        
+        SmartDashboard.putNumber("Hood Setpoint", 0);
+        turnState = TurnState.AUTOTARGET;
     }
 
     // inside the HoodCommand
@@ -31,15 +34,21 @@ public class HoodCommand extends CommandBase {
      */
     @Override
     public void execute() {
-        SmartDashboard.putNumber("Hood optical", m_hoodSubsystem.getOpticalEncoder());
-        SmartDashboard.putNumber("Hood dce", m_hoodSubsystem.getAngle());
+        
+        m_hoodSubsystem.debug();
+        
+        if(Math.abs(jStick.getAsDouble()) > 0.1){
+            turnState = TurnState.MANUAL;
+        }
         switch (turnState) {
         case AUTOTARGET: {
-            autoAdjust(distToAngle(Limelight.getDistance()));
+            autoAdjust();
+            double target = SmartDashboard.getNumber("Hood Setpoint", 0);
+            controller.setSetpoint(target);
             break;
         }
         case MANUAL: {
-            m_hoodSubsystem.turn(jStick.getAsDouble());
+            m_hoodSubsystem.turn(0.5 * jStick.getAsDouble());
 
             
            //System.out.println(jStick.getAsDouble());
@@ -89,9 +98,18 @@ public class HoodCommand extends CommandBase {
      * 
      * @param distance distance to adjust to
      */
-    private void autoAdjust(double distance) {
-        controller.setSetpoint(distance);
-        m_hoodSubsystem.turn(controller.calculate(m_hoodSubsystem.getAngle()));
+    private void autoAdjust() {
+        double PIDpower = controller.calculate(m_hoodSubsystem.getOpticalEncoder());
+       // PIDpower *= 10;
+        SmartDashboard.putNumber("Hood PID power", PIDpower);
+        m_hoodSubsystem.turn(-PIDpower);
+        if(m_hoodSubsystem.getOpticalEncoder() > 0){
+            
+        }
+       
+    
+        
+       //m_hoodSubsystem.turn(controller.calculate(m_hoodSubsystem.getAngle()));
 
     }
 

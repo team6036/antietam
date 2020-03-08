@@ -61,4 +61,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("rightDist", frontRightMotor.getEncoder().getVelocity());
     }
 
+    public void reset(){
+
+    }
+
 }

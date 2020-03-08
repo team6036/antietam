@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Joystick;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -35,6 +36,7 @@ import frc.robot.commands.DrivetrainCommand;
 import frc.robot.commands.ShooterCommand;
 import frc.robot.commands.TurretCommand;
 import frc.robot.commands.HoodCommand;
+import frc.robot.Constants.ShooterConstants.BallStates;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -71,16 +73,15 @@ public class RobotContainer {
       () -> m_controller.getTriggerAxis(Hand.kRight));
   private final TurretCommand m_turretCommand = new TurretCommand(m_turretSubsystem,
       () -> m_controller.getX(Hand.kLeft));
- private final HoodCommand m_hoodCommand = new HoodCommand(m_hoodSubsystem, () -> m_controller.getY(Hand.kRight));
-  
-  private final Consumer<Boolean> addBall = (v) ->{
-    //m_shooterCommand.addBall();
-    
+  private final HoodCommand m_hoodCommand = new HoodCommand(m_hoodSubsystem, () -> m_controller.getY(Hand.kRight));
+
+  private final Consumer<Boolean> addBall = (v) -> {
+    // m_shooterCommand.addBall();
+
   };
 
-
-  private final AccumulatorCommand m_accumulatorCommand = new AccumulatorCommand(m_accumulatorSubsystem, () -> m_controller.getTriggerAxis(Hand.kLeft), addBall);
-   
+  private final AccumulatorCommand m_accumulatorCommand = new AccumulatorCommand(m_accumulatorSubsystem,
+      () -> m_controller.getTriggerAxis(Hand.kLeft), addBall);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -107,10 +108,10 @@ public class RobotContainer {
    * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    //eftBumper.whenPressed(new InstantCommand(() -> m_accumulatorSubsystem.extend()));
-    //RightBumper.whenPressed(new InstantCommand(() -> m_accumulatorSubsystem.retract()));
+    LeftBumper.whenPressed(new InstantCommand(() -> m_accumulatorSubsystem.extend()));
+    RightBumper.whenPressed(new InstantCommand(() -> m_accumulatorSubsystem.retract()));
     m_xButton.whenPressed(new InstantCommand(() -> manualTarget()));
-    m_aButton.whenPressed(new InstantCommand(() -> HoodCommand.zero()));
+    m_aButton.whenPressed(new InstantCommand(() -> SmartDashboard.putNumber("Hood Setpoint", 0)));
     m_threePointButton.whenPressed(new InstantCommand(() -> threePoint()));
 
   }
@@ -122,6 +123,17 @@ public class RobotContainer {
   private void manualTarget() {
     HoodCommand.manual();
     TurretCommand.manual();
+  }
+
+  public void resetAllSubsystems() {
+    for (int i = 0; i < m_shooterCommand.ballStates.size(); i++) {
+      m_shooterCommand.ballStates.set(i, BallStates.CONTAINED);
+    }
+    m_accumulatorSubsystem.reset();
+    m_drivetrainSubsystem.reset();
+    m_hoodSubsystem.reset();
+    m_shooterSubsystem.reset();
+    m_turretSubsystem.reset();
   }
 
 }

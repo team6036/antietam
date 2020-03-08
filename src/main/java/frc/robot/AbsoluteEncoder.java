@@ -12,10 +12,7 @@ public class AbsoluteEncoder {
         this.pot = pot;
     }
     public double getAngle(){
-        return this.pot.get() + offset;
+        return this.pot.get();
         // return this.pot.get();
-    }
-    public void reset(){
-        offset = -1 * pot.get();
     }
 }

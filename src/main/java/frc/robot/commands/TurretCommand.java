@@ -3,6 +3,7 @@ package frc.robot.commands;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Limelight;
 import frc.robot.subsystems.TurretSubsystem;
@@ -35,14 +36,14 @@ public class TurretCommand extends CommandBase {
      * gobally callable; sets turret mode to threePoint
      */
     public static void threePoint() {
-        turretMode = TurretMode.THREEPOINT;
+        // turretMode = TurretMode.THREEPOINT;
     }
 
     /**
      * globally callable; sets turret mode to twoPoint
      */
     public static void twoPoint() {
-        turretMode = TurretMode.TWOPOINT;
+        // turretMode = TurretMode.TWOPOINT;
     }
 
     /**
@@ -59,8 +60,9 @@ public class TurretCommand extends CommandBase {
      */
     @Override
     public void execute() {
-
-        //m_turretSubsystem.turn(0.1);
+        SmartDashboard.putString("turretValue", turretMode.toString());
+        SmartDashboard.putNumber("DeltaX", Limelight.tx());
+        // m_turretSubsystem.turn(0.1);
         switch (turretMode) {
         case TWOPOINT: {
             if (Limelight.ta() != 0) {
@@ -68,14 +70,17 @@ public class TurretCommand extends CommandBase {
             } else {
                 seek();
             }
+            break;
         }
         case THREEPOINT: {
             zero(m_turretSubsystem.getDisplacement());
+            break;
         }
         case MANUAL: {
 
             m_turretSubsystem.turn(jStick.getAsDouble() * 0.5);
-            //TODO move threshold to the command out of subsystem
+            break;
+            // TODO move threshold to the command out of subsystem
         }
         }
     }
@@ -98,8 +103,8 @@ public class TurretCommand extends CommandBase {
 
     /**
      * turns drivetrain to match turret,
-     */ 
-    //todo make sure to make the turret turn opposite so the error gets reduced lol
+     */
+    // todo make sure to make the turret turn opposite so the error gets reduced lol
     public void zero(double d) {
         DrivetrainCommand.drive(pidController.calculate(d), -pidController.calculate(d)); // check polarity
     }

@@ -22,85 +22,59 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class ShooterCommand extends CommandBase {
 
-
   private final boolean debug = ShooterConstants.debug;
   private final double kp = ShooterConstants.kp;
 
   private final ShooterSubsystem m_shooterSubsystem;
   private DoubleSupplier m_rTrigger;
-  
+
   private boolean ballSensorIn = true;
 
-
-  private ArrayList<BallStates> ballStates = new ArrayList<>(
+  public ArrayList<BallStates> ballStates = new ArrayList<>(
       Arrays.asList(new BallStates[] { BallStates.CONTAINED, BallStates.CONTAINED, BallStates.CONTAINED }));
-  private PIDController pidController = new PIDController(kp, 0, 0);
+  // private PIDController pidController = new PIDController(kp, 0, 0);
 
   public ShooterCommand(ShooterSubsystem shooterSubsystem, DoubleSupplier rTrigger) {
     m_shooterSubsystem = shooterSubsystem;
     this.m_rTrigger = rTrigger;
-    balls = 0;
-    addRequirements(shooterSubsystem); // @TODO this for all commands and respective key subsystems
+    addRequirements(shooterSubsystem);
+    // pidController.setTolerance(100); // @TODO this for all commands and
+    // respective key subsystems
   }
 
   public void addBall() {
     ballStates.add(BallStates.CONTAINED);
   }
 
-
   @Override
   public void execute() {
-    if(debug){
+    if (debug) {
       m_shooterSubsystem.debug();
+      SmartDashboard.putString("value", ballStates.get(0).toString());
     }
     // // if ball is contained or waiting, makes sure it doesnt come out
     // containBall();
+    handleJoystick();
     // // if ball is ready, shoot, if it has left, remove it
-    // shootBall();
-    // // if ball is contained, ramp up, if contained, stop
-    // setVelocity();
-    // // if past a threshold, set all to waiting, if medium, only one, if low, do nothing
-    // handleJoystick();
-    // // if no balls, stop
-    // reset();
-
-    /**
-    if(controller.getBButton()){
-      m_shooterSubsystem.setHopupVelocity(-0.5);
-    }
-    if(controller.getXButton()){
-      m_shooterSubsystem.setHopupVelocity(0.5);
-    }else{
-      m_shooterSubsystem.setHopupVelocity(0.0);
-    }
-
-
-*/
-    if(m_rTrigger.getAsDouble() < 0.05){
-      m_shooterSubsystem.setShooterVelocity(0.0);
-      m_shooterSubsystem.setHopupVelocity(0.0);
-    }else{
-      m_shooterSubsystem.setShooterVelocity(m_rTrigger.getAsDouble());
-      m_shooterSubsystem.setHopupVelocity(-0.99);
-    //  m_shooterSubsystem.setHopupVelocity(-0.5);
-     SmartDashboard.putNumber("Shooter velocity", m_shooterSubsystem.getShooterVelocity());
-    
-    }
-    m_shooterSubsystem.debug();
     countBall();
-
+    shootBall();
+    // // if ball is contained, ramp up, if contained, stop
+    setVelocity();
+    // // if past a threshold, set all to waiting, if medium, only one, if low, do
+    // nothing
+    // // if no balls, stop
+    reset();
   }
-  private int balls = 0;
-  private void countBall(){
-    SmartDashboard.putNumber("balls in", balls);
-    if(!ballSensorIn){
-      if(m_shooterSubsystem.getLineBreakIn()){
-        balls++;
-        
+
+  private void countBall() {
+    if (!ballSensorIn) {
+      if (m_shooterSubsystem.getLineBreakIn()) {
+        m_shooterSubsystem.incrementBalls();
       }
-    }
+    } 
     ballSensorIn = m_shooterSubsystem.getLineBreakIn();
   }
+
   /**
    * CointainBall() makes sure nothing comes out, spins backwards if it do, only
    * when contained or waiting
@@ -109,7 +83,7 @@ public class ShooterCommand extends CommandBase {
     switch (ballStates.get(0)) {
     case CONTAINED: {
       if (m_shooterSubsystem.getLineBreakOut()) {
-        m_shooterSubsystem.setHopupVelocity(-0.1);
+        m_shooterSubsystem.setHopupVelocity(0);
       }
       return;
     }
@@ -132,7 +106,7 @@ public class ShooterCommand extends CommandBase {
   private void shootBall() {
     switch (ballStates.get(0)) {
     case READY: {
-      m_shooterSubsystem.setHopupVelocity(0.1); //TODO change this to final
+      m_shooterSubsystem.setHopupVelocity(-0.4); // TODO change this to final
       if (m_shooterSubsystem.getLineBreakOut()) {
         ballStates.set(0, BallStates.LEAVING);
       }
@@ -158,16 +132,26 @@ public class ShooterCommand extends CommandBase {
   private void setVelocity() {
     switch (ballStates.get(0)) {
     case WAITING: {
-      pidController.setSetpoint(0.1); // TODO this needs to be changed to target speed
-      if (pidController.getSetpoint() == m_shooterSubsystem.getShooterVelocity()) {
+      m_shooterSubsystem.setShooterVelocity(1);
+      // pidController.setSetpoint(4500); // TODO this needs to be changed to target
+      // speed
+      // if (pidController.getSetpoint() == m_shooterSubsystem.getShooterVelocity()) {
+      if (m_shooterSubsystem.getShooterVelocity() >= 4000) {
         ballStates.set(0, BallStates.READY);
-      } else {
-        m_shooterSubsystem.setShooterVelocity(pidController.calculate(m_shooterSubsystem.getShooterVelocity()));
       }
-      return;
+      /*
+       * } else { SmartDashboard.putNumber("shooter velocity",
+       * pidController.calculate(m_shooterSubsystem.getShooterVelocity()));
+       * m_shooterSubsystem.setShooterVelocity(pidController.calculate(
+       * m_shooterSubsystem.getShooterVelocity())); } return;
+       */
+      break;
     }
     case CONTAINED: {
-      pidController.setSetpoint(0);
+      // pidController.setSetpoint(0);
+      // m_shooterSubsystem.setShooterVelocity(0);
+      m_shooterSubsystem.setShooterVelocity(0);;
+      m_shooterSubsystem.setHopupVelocity(0);
       return;
     }
     default: {
@@ -182,6 +166,7 @@ public class ShooterCommand extends CommandBase {
    */
   public void handleJoystick() {
     if (m_rTrigger.getAsDouble() > 0.5) {
+      System.out.println("Engaging all");
       for (int i = 0; i < ballStates.size(); i++) {
         ballStates.set(i, BallStates.WAITING);
       }
@@ -197,7 +182,8 @@ public class ShooterCommand extends CommandBase {
    */
   public void reset() {
     if (ballStates.get(0) == BallStates.CONTAINED) {
-      m_shooterSubsystem.setShooterVelocity(0);
+      System.out.println("Containing");
+      // m_shooterSubsystem.setShooterVelocity(0);
     }
   }
 }

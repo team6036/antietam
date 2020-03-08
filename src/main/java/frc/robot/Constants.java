@@ -28,16 +28,17 @@ public final class Constants {
 
         public final static int rollerMotorPort = 0;
         public final static int serializerMotorPort = 1;
-        public final static int ballTubeMotorPort = 2;
+        
 
         public final static int solenoid1APort = 0;
         public final static int solenoid1BPort = 7;
 
         public final static double rollerMotorPower = 0.75; 
-        public final static double serializerMotorPower = -0.75; 
+        public final static double serializerMotorPower = -1; 
         public final static double ballTubeMotorPower = -0.99; 
         
-        
+        public final static int ballTubeMotorPort = 2;
+
 
         public final static boolean debug = false;
     }
@@ -48,8 +49,10 @@ public final class Constants {
         }
 
         public static final int motorPort = 6;
-        public static final int encoderPort = 5;
-        public static final double kp = 0.00001;
+        public static final int encoderPortA = 1;
+        public static final int encoderPortB = 2;
+        public static final double kp = 0.0008;
+        public static final double kd = 0.00001;
     }
 
     public final static class TurretConstants {
@@ -62,7 +65,8 @@ public final class Constants {
         }
 
         public static final int motorPort = 5;
-        public static final int encoderPorts = 6;
+        public static final int encoderPortA = 5;
+        public static final int encoderPortB = 6;
         public static final double kp = 0.00001;
     }
     //control panel 3,4
@@ -93,9 +97,9 @@ public final class Constants {
 
         public static final int firstShooterPort = 6;
         public static final int secondShooterPort = 7;
-        public static final int hopupPort = 4;
+        public static final int hopupPort = 8;
         public static final int lineBreakPort = 0;
-        public static final double kp = 0.00001;
+        public static final double kp = 0.0008;
 
         public static final boolean debug = true;
     }

@@ -55,13 +55,13 @@ public class AccumulatorCommand extends CommandBase {
 
       m_accumulator.rollerMotor.set(Constants.AccumulatorConstants.rollerMotorPower);
       m_accumulator.serializerMotor.set(-Constants.AccumulatorConstants.serializerMotorPower);
-      m_accumulator.ballTubeMotor.set(Constants.AccumulatorConstants.ballTubeMotorPower);
+      m_accumulator.ballTubeMotor.set(-0.5);
     } else {
       // trigger is not being pressed, so stop motor power
       if (m_accumulator.rollerMotor.get() != 0.0) {
         m_accumulator.rollerMotor.set(0.0);
         m_accumulator.serializerMotor.set(0.0);
-        m_accumulator.ballTubeMotor.set(0.0);
+        m_accumulator.ballTubeMotor.set(0);
       }
     }
   }
@@ -73,4 +73,5 @@ public class AccumulatorCommand extends CommandBase {
   public boolean isFinished() {
     return false;
   }
+
 }

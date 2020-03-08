@@ -14,7 +14,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     private static final int firstShooterPort = ShooterConstants.firstShooterPort;
     private static final int secondShooterPort = ShooterConstants.secondShooterPort;
-    private static final int hopupPort = ShooterConstants.hopupPort;
+    // private static final int hopupPort = ShooterConstants.hopupPort;
     private static final int lineBreakPort = ShooterConstants.lineBreakPort;
 
     private CANSparkMax firstShooter;
@@ -25,7 +25,7 @@ public class ShooterSubsystem extends SubsystemBase {
     public ShooterSubsystem() {
         firstShooter = new CANSparkMax(firstShooterPort, MotorType.kBrushless);
         secondShooter = new CANSparkMax(secondShooterPort, MotorType.kBrushless);
-        hopupMotor = new VictorSP(hopupPort);
+        hopupMotor = new VictorSP(ShooterConstants.hopupPort);
         lineBreakIn = new DigitalInput(9);
 
         secondShooter.follow(firstShooter);
@@ -35,6 +35,9 @@ public class ShooterSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("rpm1", -firstShooter.getEncoder().getVelocity());
         SmartDashboard.putNumber("rpm2", -secondShooter.getEncoder().getVelocity());
         SmartDashboard.putBoolean("acc line break", lineBreakIn.get());
+        SmartDashboard.putNumber("Hopup", hopupMotor.get());
+        SmartDashboard.putNumber("balls in", balls);
+        SmartDashboard.putNumber("power", firstShooter.get());
     }
 
     public void setShooterVelocity(double power) {
@@ -46,6 +49,7 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public void setHopupVelocity(double targetVelocity) {
+
         hopupMotor.set(targetVelocity);
     }
 
@@ -53,10 +57,27 @@ public class ShooterSubsystem extends SubsystemBase {
         return lineBreakIn.get();
     }
 
-    public boolean getLineBreakOut(){
+    public boolean getLineBreakOut() {
         return false;
     }
-    
+
+    private int balls = 0;
+
+    public void resetBalls() {
+        balls = 0;
+    }
+
+    public void incrementBalls() {
+        balls++;
+    }
+
+    public void decrementBalls() {
+        balls--;
+    }
+
+    public void reset() {
+        resetBalls();
+    }
 
     @Override
     public void periodic() {
